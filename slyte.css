@@ -1,14 +1,24 @@
+   .caixa {
+    border-color: cornflowerblue
+   }
    body { 
-    background-color: rgb(134, 147, 171);
+    border-color: black;
     font-family: sans-serif; 
-    font-size: 20px; }
+    font-size: 20px;
+    margin: 20px 5%;
+    
+  }
     
    .inicio {
+    
     border-radius: 20px;
     background-color: gray;
     text-align: center;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     font-size: 25px;
+    margin: auto;
+    width: 90%;
+    margin-top: 10%;
    }
    .home{
     text-align: center;
@@ -18,11 +28,11 @@
     margin: auto
    }
    .bordan {
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     border-radius: 20px;
     margin: 40pix auto;
   }
-   }   
+  
    h2 {
     font-size: 30px;
    }
@@ -34,15 +44,17 @@
     border-radius: 20%;
   }
   .contatos { 
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     background-color: gray;
     border-radius: 20px;
     text-align: center;
     margin: 20px auto;
   }
+
   .tabela {
-    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     background-color: gray;
     border-radius: 20px;
     margin: auto;
+    width: 300px;
   }
