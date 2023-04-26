@@ -4,7 +4,18 @@
     font-size: 20px; }
     
    .inicio {
+    border-radius: 20px;
     background-color: gray;
+    text-align: center;
+    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+   }
+   .parafrafo {
+    margin: 20ps 20px;
+   }
+   .bordan {
+    border-color: blueviolet;
+    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+    border-radius: 20px;
    }
 
    .link {
@@ -23,4 +34,7 @@
   }
   .contatos { 
     background-color: gray;
+    border-radius: 20px;
+    text-align: center;
+    margin: auto;
   }
