@@ -3,6 +3,14 @@
     font-family: sans-serif; 
     font-size: 20px; }
     
+   .inicio {
+    background-color: gray;
+   }
+
+   .link {
+    color:black;
+   }
+   
    h2 {
     font-size: 25px;
    }
@@ -12,4 +20,7 @@
   }
   .foto2 {
     border-radius: 20%;
+  }
+  .contatos { 
+    background-color: gray;
   }
