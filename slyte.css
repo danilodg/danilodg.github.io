@@ -7,23 +7,24 @@
     border-radius: 20px;
     background-color: gray;
     text-align: center;
-    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
+    font-size: 25px;
+   }
+   .home{
+    text-align: center;
+    margin: 30pix auto;
    }
    .parafrafo {
-    margin: 20ps 20px;
+    margin: auto
    }
    .bordan {
-    border-color: blueviolet;
-    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     border-radius: 20px;
-   }
-
-   .link {
-    color:black;
-   }
-   
+    margin: 40pix auto;
+  }
+   }   
    h2 {
-    font-size: 25px;
+    font-size: 30px;
    }
   
   .fotos { 
@@ -33,8 +34,15 @@
     border-radius: 20%;
   }
   .contatos { 
+    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
     background-color: gray;
     border-radius: 20px;
     text-align: center;
+    margin: 20px auto;
+  }
+  .tabela {
+    box-shadow: 0px 0px 15px 0px rgb(0, 0, 0);
+    background-color: gray;
+    border-radius: 20px;
     margin: auto;
   }
