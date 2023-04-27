@@ -1,24 +1,35 @@
-   .caixa {
-    border-color: cornflowerblue
-   }
-   body { 
-    border-color: black;
+
+    * {  /* toda a pagina (*) */
+      margin: 0%;
+      padding: 0%;
+    }
+    body { 
     font-family: sans-serif; 
     font-size: 20px;
-    margin: 20px 5%;
-    
-  }
-    
+    border: 0;
+    padding: 0;
+    }
+    .fotoinicio{
+      width: 100%;
+      padding: none;
+      border: none;
+    }
+    .menu {
+      position: fixed;
+      background-color: white;
+      border: 2px solid black;
+      padding: 20px;
+      de
+    }
+    .menu li{
+      display: inline;
+    }
    .inicio {
-    
-    border-radius: 20px;
     background-color: gray;
-    text-align: center;
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     font-size: 25px;
-    margin: auto;
     width: 90%;
-    margin-top: 10%;
+    margin: auto; /* centralizar com a margem (*) */
+    margin-bottom: 100px;
    }
    .home{
     text-align: center;
@@ -28,14 +39,9 @@
     margin: auto
    }
    .bordan {
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
-    border-radius: 20px;
-    margin: 40pix auto;
+    text-align: center;
+    border: 2px solid black;
   }
-  
-   h2 {
-    font-size: 30px;
-   }
   
   .fotos { 
     border-radius: 100%;
@@ -51,10 +57,19 @@
     margin: 20px auto;
   }
 
-  .tabela {
+  .hobbies {
     box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     background-color: gray;
     border-radius: 20px;
     margin: auto;
     width: 300px;
+  }
+  li:hover {
+    color: brown;
+  }
+  h2 {
+    font-size: 30px;
+   }
+  hi{
+  text-align: center;
   }
