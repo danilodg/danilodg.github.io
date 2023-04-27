@@ -2,34 +2,43 @@
     * {  /* toda a pagina (*) */
       margin: 0%;
       padding: 0%;
+      
     }
     body { 
-    font-family: sans-serif; 
-    font-size: 20px;
-    border: 0;
-    padding: 0;
+     font-family: sans-serif; 
+     font-size: 20px;
+     border: 0;
+     padding: 0;
+     background-color:darkgrey;
     }
-    .fotoinicio{
-      width: 100%;
-      padding: none;
-      border: none;
+    .botao { 
+      text-decoration:none; /* tirar trasso (*) */
+      color: gray;
+      border-radius: 10%;
+      padding: 5px;
+      font-size: 15px;
     }
     .menu {
       position: fixed;
-      background-color: white;
-      border: 2px solid black;
-      padding: 20px;
-      de
+      background-color: black;
+      padding: 10px;
     }
     .menu li{
       display: inline;
+      text-decoration: none;
+    }
+    .menucima {
+      padding: 10px;
+      text-align: center;
+      color: gray;
+      background-color: black;
     }
    .inicio {
     background-color: gray;
     font-size: 25px;
-    width: 90%;
-    margin: auto; /* centralizar com a margem (*) */
-    margin-bottom: 100px;
+    width: 100%;; /* centralizar com a margem (*) */
+    background-image: url(https://blog.ead.unipar.br/wp-content/uploads/2021/03/ti.jpg);
+    background-size: cover;
    }
    .home{
     text-align: center;
@@ -41,6 +50,7 @@
    .bordan {
     text-align: center;
     border: 2px solid black;
+    background-color: gray;
   }
   
   .fotos { 
@@ -50,26 +60,32 @@
     border-radius: 20%;
   }
   .contatos { 
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
-    background-color: gray;
-    border-radius: 20px;
+    background-color: black;
+    color: gray;
     text-align: center;
-    margin: 20px auto;
+    margin-top: 20px;
+    
   }
 
   .hobbies {
-    box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
     background-color: gray;
-    border-radius: 20px;
     margin: auto;
-    width: 300px;
+    width: 400px;
   }
   li:hover {
-    color: brown;
+    color: gray;
+  }
+  a:hover {
+    color: white;
+    background-color: black;
   }
   h2 {
     font-size: 30px;
    }
-  hi{
+  hi { 
   text-align: center;
+  }
+  #fotos {
+    position: absolute;
+    text-align: center;
   }
