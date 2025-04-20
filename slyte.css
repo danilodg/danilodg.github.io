@@ -1,91 +1,125 @@
+* {
+  margin: 0%;
+  padding: 0%;
+}
 
-    * {  /* toda a pagina (*) */
-      margin: 0%;
-      padding: 0%;
-      
-    }
-    body { 
-     font-family: sans-serif; 
-     font-size: 20px;
-     border: 0;
-     padding: 0;
-     background-color:darkgrey;
-    }
-    .botao { 
-      text-decoration:none; /* tirar trasso (*) */
-      color: gray;
-      border-radius: 10%;
-      padding: 5px;
-      font-size: 15px;
-    }
-    .menu {
-      position: fixed;
-      background-color: black;
-      padding: 10px;
-    }
-    .menu li{
-      display: inline;
-      text-decoration: none;
-    }
-    .menucima {
-      padding: 10px;
-      text-align: center;
-      color: gray;
-      background-color: black;
-    }
-   .inicio {
-    background-color: gray;
-    font-size: 25px;
-    width: 100%;; /* centralizar com a margem (*) */
-    background-image: url(https://blog.ead.unipar.br/wp-content/uploads/2021/03/ti.jpg);
-    background-size: cover;
-   }
-   .home{
-    text-align: center;
-    margin: 30pix auto;
-   }
-   .parafrafo {
-    margin: auto
-   }
-   .bordan {
-    text-align: center;
-    border: 2px solid black;
-    background-color: gray;
-  }
-  
-  .fotos { 
-    border-radius: 100%;
-  }
-  .foto2 {
-    border-radius: 20%;
-  }
-  .contatos { 
-    background-color: black;
-    color: gray;
-    text-align: center;
-    margin-top: 20px;
-    
-  }
+html, body {
+  width: 100%;
+  height: 100%;
+}
 
-  .hobbies {
-    background-color: gray;
-    margin: auto;
-    width: 400px;
+
+body {
+  font-family: sans-serif;
+  font-size: 20px;
+  border: 0;
+  padding: 0;
+  background-color: darkgrey;
+  font-family: 'Poppins', sans-serif;
+}
+
+.title {
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+}
+
+#menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  width: 100%;
+  position: fixed;
+  padding: 10px;
+  border-color: black;
+  background-color: #1e1e2f;
+  z-index: 10; 
+}
+
+.nav{
+  color: white;
+  margin-right: 20px
+}
+
+.botao {
+  text-decoration: none;
+  /* tirar trasso (*) */
+  color: rgb(255, 255, 255);
+  border-radius: 10%;
+  padding: 5px;
+  font-size: 18px;
+}
+
+#main{
+  padding-top: 60px;
+  width: 100%;
+  background-color: #0f0f1c;
+}
+
+.image-container {
+  position: relative;
+  color: white;
+  width: 100%;
+  min-height: 100vh; /* ocupa toda a altura da janela */
+  background-image: url("./ImagemDeFundo.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Sobreamento */
+  z-index: 1; /* Faz a sobreposição ficar acima da imagem */
+}
+
+#dev {
+  display: flex;
+}
+
+.sobre {
+  padding-top: 50px;
+  padding-left: 150px;
+  padding-right: 150px;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ocupa toda a altura da janela */
+}
+
+#footer {
+  height: 40px;
+  width: (100% - 10px);
+  padding: 10px;
+  background-color: #1e1e2f;
+}
+
+#typing {
+  border-right: 2px solid white;     /* A barrinha que pisca */
+  white-space: nowrap;               /* Não quebra linha */
+  overflow: hidden;                  /* Esconde o texto que ainda não foi digitado */
+  display: inline-block;
+  color: #1aff66;
+  animation: blink-caret 0.7s step-end infinite;
+}
+
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent;
   }
-  li:hover {
-    color: gray;
+  50% {
+    border-color: white;
   }
-  a:hover {
-    color: white;
-    background-color: black;
-  }
-  h2 {
-    font-size: 30px;
-   }
-  hi { 
-  text-align: center;
-  }
-  #fotos {
-    position: absolute;
-    text-align: center;
-  }
+}
