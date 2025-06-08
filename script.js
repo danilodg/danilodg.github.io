@@ -1,4 +1,5 @@
 const element = document.getElementById("typing-slogan");
+
 const texts = [
   "Inovando com tecnologia",
   "Transformando ideias em sistemas",
@@ -6,12 +7,24 @@ const texts = [
   "Soluções inteligentes para seu negócio",
   "Desenvolvimento sob medida",
 ];
+
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 
+// Cria o cursor e adiciona ao elemento
+const cursor = document.createElement('span');
+cursor.className = 'cursor';
+element.innerHTML = ''; // Limpa conteúdo antigo
+element.appendChild(document.createTextNode('')); // texto vazio inicial
+element.appendChild(cursor);
+
 function typeEffect() {
   const currentText = texts[textIndex];
+
+  cursor.classList.add('hidden'); // desativa o piscar durante digitação
+
+  let textNode = element.firstChild;
 
   if (isDeleting) {
     charIndex--;
@@ -19,23 +32,26 @@ function typeEffect() {
     charIndex++;
   }
 
-  element.textContent = currentText.substring(0, charIndex);
+  textNode.textContent = currentText.substring(0, charIndex);
 
-  let speed = isDeleting ? 50 : 120;
+  let delay = isDeleting ? 50 : 100;
 
   if (!isDeleting && charIndex === currentText.length) {
-    speed = 2000;
+    delay = 1500;
     isDeleting = true;
+    cursor.classList.remove('hidden'); // ativa piscar no fim
   } else if (isDeleting && charIndex === 0) {
     isDeleting = false;
     textIndex = (textIndex + 1) % texts.length;
-    speed = 500;
+    delay = 800;
+    cursor.classList.remove('hidden'); // ativa piscar no início
   }
 
-  setTimeout(typeEffect, speed);
+  setTimeout(typeEffect, delay);
 }
 
-window.addEventListener("DOMContentLoaded", typeEffect);
+window.addEventListener('DOMContentLoaded', typeEffect);
+
 
 const menuBtn = document.querySelector('.menu-btn');
 const menuList = document.querySelector('.menu-list');
@@ -55,16 +71,21 @@ const projectCards = document.querySelectorAll('.card-project');
 
 projectCards.forEach(card => {
   card.addEventListener('click', () => {
+    // Pega título e descrição do card clicado
+    // Ao abrir modal
+    
     const title = card.querySelector('.title-card-project').textContent;
     const description = card.querySelector('.footer-card-project p').textContent;
-
+    
+    // Atualiza conteúdo do modal
     modalTitle.textContent = title;
     modalDescription.textContent = description + "\n\nAqui você pode adicionar mais informações detalhadas do projeto.";
-
-    // Bloqueia scroll da página
+    
+    // Mostra o modal
     document.body.style.overflow = 'hidden';
 
-    // Exibe modal
+    // Ao fechar modal
+    document.body.style.overflow = 'auto';
     modal.style.display = 'flex';
   });
 });
@@ -72,15 +93,11 @@ projectCards.forEach(card => {
 // Fecha o modal ao clicar no X
 closeModalBtn.addEventListener('click', () => {
   modal.style.display = 'none';
-  // Libera scroll da página
-  document.body.style.overflow = 'auto';
 });
 
 // Fecha o modal ao clicar fora do conteúdo
 window.addEventListener('click', (event) => {
   if (event.target === modal) {
     modal.style.display = 'none';
-    // Libera scroll da página
-    document.body.style.overflow = 'auto';
   }
 });

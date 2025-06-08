@@ -153,6 +153,10 @@ main {
   z-index: 1;
 }
 
+/* ================= Imagem Fullscreen e Overlay ================= */
+
+/* ... (código existente) ... */
+
 .overlay {
   position: relative;
   z-index: 2; /* garantir que fique acima da sombra */
@@ -162,6 +166,39 @@ main {
   border-radius: 10px;
 }
 
+/* Adicione ou modifique este bloco para o slogan */
+.overlay .slogan {
+  min-height: 2.5em; /* Ajuste este valor conforme a altura máxima que você espera para a frase mais longa */
+  /* Por exemplo, se a frase mais longa tiver 30px de altura, e você quer um pouco de margem, coloque 35px ou mais. */
+  /* 'em' é uma unidade relativa ao tamanho da fonte. Experimente para encontrar o valor ideal. */
+  display: flex; /* Para centralizar verticalmente o texto dentro do min-height, se desejar */
+  align-items: center; /* Centraliza o texto verticalmente */
+  justify-content: center; /* Centraliza o texto horizontalmente */
+  margin-bottom: 1rem; /* Pode ajustar a margem inferior se necessário */
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: #00ff00;
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink 1s step-start infinite;
+}
+
+.cursor.hidden {
+  animation: none;
+  opacity: 1;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+/* ... (restante do seu CSS) ... */
 /* Aumentar o espaçamento entre a imagem e o 'Sobre mim' */
 
 #sobre {
