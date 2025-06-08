@@ -1,125 +1,400 @@
+/* ================= Reset e Base ================= */
+
 * {
-  margin: 0%;
-  padding: 0%;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
-
-body {
-  font-family: sans-serif;
-  font-size: 20px;
-  border: 0;
+  margin: 0;
   padding: 0;
-  background-color: darkgrey;
-  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
 }
 
-.title {
-  font-family: 'Roboto Mono', monospace;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0f0f0f;
+  color: white;
 }
+
+main {
+  flex: 1;
+}
+
+/* ================= Header / Menu ================= */
 
 #menu {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 40px;
-  width: 100%;
   position: fixed;
-  padding: 10px;
-  border-color: black;
-  background-color: #1e1e2f;
-  z-index: 10; 
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #1b1b1b;
+  color: #00ff00;
 }
 
-.nav{
-  color: white;
-  margin-right: 20px
+main {
+  padding-top: 60px; /* compensa altura do header fixo */
+  flex: 1;
 }
 
-.botao {
-  text-decoration: none;
-  /* tirar trasso (*) */
-  color: rgb(255, 255, 255);
-  border-radius: 10%;
+#menu .container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 5px;
-  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-#main{
-  padding-top: 60px;
-  width: 100%;
-  background-color: #0f0f1c;
+.logo h1 {
+  font-size: 1.8rem;
+  color: #00ff00;
+  font-weight: 700;
 }
+
+.logo .highlight {
+  color: #00ff00;
+}
+
+.logo .subtitle {
+  font-size: 0.9rem;
+  color: #66ff66;
+  margin-top: -6px;
+  font-weight: 500;
+}
+
+.nav {
+  position: relative;
+}
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #00ff00;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.menu-list li a {
+  color: #00ff00;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease-in-out;
+}
+
+.menu-list li a:hover,
+.menu-list li a:focus {
+  color: #66ff66;
+  outline: none;
+}
+
+/* Menu mobile - escondido e visível ao ativar */
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .menu-list {
+    flex-direction: column;
+    background-color: #1b1b1b;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    margin: 0;
+    padding: 1rem 0;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3);
+    z-index: 10;
+    display: none; /* Escondido por padrão */
+  }
+
+  .menu-list.active {
+    display: flex; /* Mostra menu quando ativo */
+  }
+
+  .menu-list li {
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+}
+
+/* ================= Imagem Fullscreen e Overlay ================= */
 
 .image-container {
   position: relative;
-  color: white;
-  width: 100%;
-  min-height: 100vh; /* ocupa toda a altura da janela */
-  background-image: url("./ImagemDeFundo.webp");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  height: 100vh;
+  background: url('./ImagemDeFundo.webp') center center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Adiciona sombra preta suave por cima da imagem */
+  /* Usaremos um ::before para fazer a sombra em toda a área */
+}
+
+.image-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* sombra preta semi-transparente */
+  pointer-events: none; /* não bloqueia cliques */
+  z-index: 1;
 }
 
 .overlay {
+  position: relative;
+  z-index: 2; /* garantir que fique acima da sombra */
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4); /* mantenho uma camada leve */
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+/* Aumentar o espaçamento entre a imagem e o 'Sobre mim' */
+
+#sobre {
+  margin-top: 3rem; /* mais espaço entre imagem e seção */
+}
+
+
+#title {
+  font-size: 3rem;
+  color: #00ff00;
+}
+
+/* ================= Seções: Sobre, Projetos, Serviços ================= */
+
+/* Aqui o ajuste importante:
+   Vamos garantir que as margens laterais sejam iguais ao padding do header para alinhar
+*/
+
+.sobre,
+.projetos,
+.servicos {
+  margin-bottom: 4rem;
+  padding-left: 2rem;  /* mesma distância da lateral do header */
+  padding-right: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #00ff00;
+}
+
+p {
+  font-size: 1.1rem;
+  color: #ccc;
+  max-width: 700px;
+}
+
+/* ================= Cards de Projetos e Serviços ================= */
+
+.card-project-container,
+.card-servicos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.card-servicos-container {
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .card-servicos-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.card-project,
+.card-servicos {
+  background-color: #1b1b1b;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 350px;
+  transition: transform 0.3s ease;
+}
+
+.card-project:hover,
+.card-servicos:hover {
+  transform: translateY(-5px);
+}
+
+.imagem {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.card-servicos img,
+.footer-card-project img {
+  width: 100%;       /* ocupa toda largura do container */
+  height: 180px;     /* altura fixa menor que a largura para ficar horizontal */
+  object-fit: cover; /* corta a imagem para cobrir o espaço, mantendo proporção */
+  object-position: center; /* centraliza o corte */
+  border-radius: 8px; /* opcional, arredonda bordas */
+}
+
+.footer-card-project,
+.main-card-servicos {
+  margin-top: 0.5rem;
+}
+
+/* ================= Tags ================= */
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tag {
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  background-color: #444;
+  margin-right: 0.4rem;
+}
+
+/* Tags específicas, cores sugeridas */
+.tag.hardware {
+  background-color: #E65100; /* laranja escuro */
+}
+
+.tag.software {
+  background-color: #1E88E5; /* azul */
+}
+
+.tag.suporte {
+  background-color: #43A047; /* verde */
+}
+
+.tag.estrategia {
+  background-color: #6A1B9A; /* roxo */
+}
+
+.tag.tecnologia {
+  background-color: #00ACC1; /* ciano */
+}
+
+.tag.consultoria {
+  background-color: #FFB300; /* amarelo escuro */
+}
+
+.tag.react {
+  background-color: #61DAFB;
+  color: black;
+}
+
+.tag.typescript {
+  background-color: #3178C6;
+}
+
+.tag.python {
+  background-color: #3776AB;
+}
+
+.tag.redes {
+  background-color: #00897B; /* verde água */
+}
+
+.tag.seguranca {
+  background-color: #D32F2F; /* vermelho */
+}
+
+.tag.otimizacao {
+  background-color: #FBC02D; /* amarelo */
+}
+
+/* ================= Footer ================= */
+
+#footer {
+  background-color: #121212;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #ccc;
+}
+
+.footer-content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  position: absolute;
+  gap: 1rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.social-icons img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);
+}
+
+/* O fundo do modal */
+.modal {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Sobreamento */
-  z-index: 1; /* Faz a sobreposição ficar acima da imagem */
-}
-
-#dev {
+  background-color: rgba(0,0,0,0.6); /* fundo escuro translúcido */
   display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.sobre {
-  padding-top: 50px;
-  padding-left: 150px;
-  padding-right: 150px;
+.modal-content {
+  background-color: #222; /* cor do modal */
   color: white;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* ocupa toda a altura da janela */
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-#footer {
-  height: 40px;
-  width: (100% - 10px);
-  padding: 10px;
-  background-color: #1e1e2f;
-}
-
-#typing {
-  border-right: 2px solid white;     /* A barrinha que pisca */
-  white-space: nowrap;               /* Não quebra linha */
-  overflow: hidden;                  /* Esconde o texto que ainda não foi digitado */
-  display: inline-block;
-  color: #1aff66;
-  animation: blink-caret 0.7s step-end infinite;
-}
-
-@keyframes blink-caret {
-  from, to {
-    border-color: transparent;
-  }
-  50% {
-    border-color: white;
-  }
+/* Botão fechar (X) */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
