@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { FolderKanban, House, Mail, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
+import { FolderKanban, House, Mail, MessageSquareQuote, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
 
 type Theme = 'dark' | 'light'
 type ThemeMode = Theme | 'system'
@@ -113,8 +113,9 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
 
   const links: NavItem[] = [
     { id: 'sobre', href: '#sobre', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: 'Sobre' },
-    { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: 'Projetos' },
-    { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: 'Servicos' },
+    { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: 'Servicos' },
+    { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: 'Reviews' },
+    { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: 'Projetos' },
     { id: 'contato', href: '#contato', icon: <Mail className="h-5 w-5" strokeWidth={1.8} />, label: 'Contato' },
   ]
 
