@@ -25,19 +25,7 @@ export function RevenuePreview({ market }: { market: MarketAsset[] }) {
       </div>
 
       <div className={previewInnerPanelClass}>
-        <div className="flex items-end gap-2">
-          {market.map((asset) => {
-            const height = Math.max(38, 52 + asset.change24h * 20)
 
-            return (
-              <span
-                key={asset.id}
-                className="flex-1 rounded-t-[16px] rounded-b-[8px] bg-[linear-gradient(180deg,rgba(117,240,255,0.95),rgba(78,136,255,0.24))] shadow-[0_0_18px_rgba(96,164,255,0.16)]"
-                style={{ height: `${height}px` }}
-              />
-            )
-          })}
-        </div>
 
         <div className="mt-4 space-y-3">
           {market.map((asset) => (

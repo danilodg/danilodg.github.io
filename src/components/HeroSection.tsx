@@ -151,14 +151,14 @@ export function HeroSection() {
             </ul>
           </div>
 
-          <div className="relative hidden min-h-[580px] overflow-visible lg:block">
-            <div className="absolute left-0 top-8 z-10 w-[64%] opacity-95 hover:z-50">
+          <div className="relative hidden min-h-[640px] overflow-visible lg:block">
+            <div className="absolute -left-10 top-[3.75rem] z-20 w-[60%] opacity-95 hover:z-50">
               <AnalyticsPreview weather={weather} />
             </div>
-            <div className="absolute right-0 top-[5.25rem] z-20 w-[72%] hover:z-50">
+            <div className="absolute -right-0 -top-0 z-30 w-[70%] hover:z-50">
               <CodePreview github={github} />
             </div>
-            <div className="absolute bottom-4 left-[12%] z-30 w-[58%] hover:z-50">
+            <div className="absolute left-[10%] top-55 z-40 w-[70%] hover:z-50">
               <RevenuePreview market={market} />
             </div>
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_35%,rgba(117,240,255,0.18),transparent_24%),radial-gradient(circle_at_72%_70%,rgba(116,153,255,0.18),transparent_24%)] blur-3xl" />

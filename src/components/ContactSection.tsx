@@ -11,7 +11,7 @@ type FormStatus =
 const inputClass =
   'w-full rounded-2xl border border-[color:var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-[color:var(--text-main)] outline-none transition placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-line)]/60 focus:ring-2 focus:ring-cyan-300/20'
 
-const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() ?? ''
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
 
 export function ContactSection() {
   const [status, setStatus] = useState<FormStatus>({

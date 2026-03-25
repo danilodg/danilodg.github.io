@@ -1,6 +1,6 @@
 import { glassPanel, labelClass } from './ui'
 
-const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo@email.com'
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
 
 function GitHubIcon() {
   return (
@@ -55,7 +55,7 @@ export function SiteFooter() {
           <a
             aria-label="GitHub"
             className="flex items-center gap-3 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-4 py-3 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
-            href="https://github.com/"
+            href="https://github.com/danilodg"
             rel="noreferrer"
             target="_blank"
           >
@@ -66,7 +66,7 @@ export function SiteFooter() {
           <a
             aria-label="LinkedIn"
             className="flex items-center gap-3 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-4 py-3 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
-            href="https://linkedin.com/"
+            href="https://www.linkedin.com/in/danilogomesdg"
             rel="noreferrer"
             target="_blank"
           >
