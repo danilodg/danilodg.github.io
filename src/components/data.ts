@@ -1,3 +1,7 @@
+import financeAppImage from '../assets/project-finance-app.svg'
+import medicalLandingImage from '../assets/project-medical-landing.svg'
+import salesDashboardImage from '../assets/project-sales-dashboard.svg'
+
 export const technologies = [
   'JavaScript',
   'TypeScript',
@@ -37,22 +41,49 @@ export const services = [
 
 export const completedProjects = [
   {
-    title: 'Landing page comercial para captacao',
-    type: 'Site institucional',
+    title: 'Landing page para medico especialista',
+    type: 'Landing page',
     summary:
-      'Estrutura pensada para apresentar servico, destacar proposta de valor e facilitar o primeiro contato.',
+      'Pagina focada em autoridade, agendamento e conversao para consultas particulares.',
+    image: medicalLandingImage,
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
+    details:
+      'Projeto pensado para apresentar servicos medicos com uma comunicacao mais confiavel, destacar especialidades e reduzir atrito no agendamento.',
+    highlights: [
+      'Hero com CTA direto para WhatsApp e formulario de contato',
+      'Secoes de especialidades, depoimentos e perguntas frequentes',
+      'Layout responsivo com foco em leitura clara no mobile',
+    ],
   },
   {
-    title: 'Dashboard operacional com integracoes',
-    type: 'Sistema interno',
+    title: 'Dashboard de vendas e indicadores',
+    type: 'Dashboard',
     summary:
-      'Painel com leitura rapida de indicadores, organizacao de processos e automacoes ligadas ao fluxo da equipe.',
+      'Painel para acompanhar receita, metas e desempenho comercial em tempo real.',
+    image: salesDashboardImage,
+    technologies: ['React', 'TypeScript', 'Chart.js', 'Node.js'],
+    details:
+      'Sistema desenhado para centralizar metricas de vendas, facilitar leitura por equipe comercial e apoiar decisoes rapidas com dados visuais.',
+    highlights: [
+      'Cards de KPIs com receita, ticket medio e conversao',
+      'Graficos comparativos por periodo, canal e vendedor',
+      'Filtros para acompanhamento diario, semanal e mensal',
+    ],
   },
   {
-    title: 'Interface responsiva para produto web',
-    type: 'Front-end',
+    title: 'Carteira de gestao financeira',
+    type: 'Aplicativo web',
     summary:
-      'Experiencia ajustada para desktop e mobile com foco em consistencia visual, clareza e desempenho.',
+      'Produto para organizar contas, metas financeiras e acompanhamento de fluxo de caixa.',
+    image: financeAppImage,
+    technologies: ['React', 'TypeScript', 'Firebase', 'Tailwind CSS'],
+    details:
+      'Aplicacao voltada para controle financeiro pessoal, com visao de entradas e saidas, metas mensais e categorizacao de lancamentos.',
+    highlights: [
+      'Resumo de saldo, gastos por categoria e metas do mes',
+      'Cadastro de receitas e despesas com filtros rapidos',
+      'Experiencia mobile-first para acompanhar a carteira no dia a dia',
+    ],
   },
 ]
 
