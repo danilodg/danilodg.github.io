@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { FolderKanban, House, Mail, MessageSquareQuote, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
@@ -87,20 +87,31 @@ function MobileRailButton({ href, icon, label, onClick, isActive = false }: NavI
       {...(href ? { href } : { onClick, type: 'button' as const })}
       aria-current={isActive ? 'page' : undefined}
       className={[
-        'flex min-w-[72px] flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-3 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition',
+        'flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-2 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[flex-grow,background-color,color,box-shadow] duration-200 max-[360px]:gap-0.5 max-[360px]:px-1 max-[360px]:py-2 max-[360px]:text-[0.58rem] max-[360px]:tracking-[0.08em]',
+        isActive ? 'max-[360px]:flex-[1.35]' : 'max-[360px]:flex-[0.8]',
         isActive
           ? 'bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_22px_var(--accent-shadow)]'
           : 'text-[color:var(--text-soft)]',
       ].join(' ')}
     >
       <span>{icon}</span>
-      <span>{label}</span>
+      <span
+        className={[
+          'max-w-full truncate transition-all duration-200',
+          isActive
+            ? 'max-[360px]:max-w-full max-[360px]:opacity-100'
+            : 'max-[360px]:max-h-0 max-[360px]:max-w-0 max-[360px]:opacity-0',
+        ].join(' ')}
+      >
+        {label}
+      </span>
     </Component>
   )
 }
 
 export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHeaderProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
+  const [activeSection, setActiveSection] = useState<string | null>(null)
   const themeLockTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -111,15 +122,78 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
     }
   }, [])
 
-  const links: NavItem[] = [
+  const links: NavItem[] = useMemo(() => [
     { id: 'sobre', href: '#sobre', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: 'Sobre' },
     { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: 'Servicos' },
     { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: 'Reviews' },
     { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: 'Projetos' },
     { id: 'contato', href: '#contato', icon: <Mail className="h-5 w-5" strokeWidth={1.8} />, label: 'Contato' },
-  ]
+  ], [])
 
   const nextThemeMode: ThemeMode = themeMode === 'system' ? 'light' : themeMode === 'light' ? 'dark' : 'system'
+
+  useEffect(() => {
+    let frameId: number | null = null
+    const sectionIds = links.map((item) => item.id)
+
+    const updateActiveSection = () => {
+      const viewportLine = window.innerHeight * 0.45
+      let nextSection: string | null = null
+      let closestDistance = Number.POSITIVE_INFINITY
+      let firstSectionTop = Number.POSITIVE_INFINITY
+
+      for (const sectionId of sectionIds) {
+        const section = document.getElementById(sectionId)
+        if (!section) {
+          continue
+        }
+
+        const rect = section.getBoundingClientRect()
+        firstSectionTop = Math.min(firstSectionTop, rect.top)
+
+        const distance = rect.top <= viewportLine && rect.bottom >= viewportLine
+          ? 0
+          : Math.min(Math.abs(rect.top - viewportLine), Math.abs(rect.bottom - viewportLine))
+
+        if (distance < closestDistance) {
+          closestDistance = distance
+          nextSection = sectionId
+        }
+      }
+
+      if (firstSectionTop > viewportLine) {
+        setActiveSection(null)
+        return
+      }
+
+      setActiveSection(nextSection)
+    }
+
+    const requestSectionUpdate = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null
+        updateActiveSection()
+      })
+    }
+
+    updateActiveSection()
+
+    window.addEventListener('scroll', requestSectionUpdate, { passive: true })
+    window.addEventListener('resize', requestSectionUpdate)
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+
+      window.removeEventListener('scroll', requestSectionUpdate)
+      window.removeEventListener('resize', requestSectionUpdate)
+    }
+  }, [links])
 
   function keepThemeButtonExpanded() {
     setExpandedItem('theme')
@@ -158,6 +232,7 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
               <DesktopRailButton
                 {...item}
                 expanded={expandedItem === item.id}
+                isActive={activeSection === item.id}
                 key={item.label}
                 onBlur={() => setExpandedItem((currentItem) => (currentItem === item.id ? null : currentItem))}
                 onFocus={() => setExpandedItem(item.id)}
@@ -211,9 +286,9 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
           </button>
         </div>
 
-        <nav className="fixed inset-x-3 bottom-3 z-30 flex gap-2 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] [view-transition-name:none]" aria-label="Navegacao principal mobile">
+        <nav className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] max-[360px]:gap-1 max-[360px]:p-1.5 [view-transition-name:none]" aria-label="Navegacao principal mobile">
           {links.map((item) => (
-            <MobileRailButton {...item} key={item.label} />
+            <MobileRailButton {...item} isActive={activeSection === item.id} key={item.label} />
           ))}
         </nav>
       </header>
