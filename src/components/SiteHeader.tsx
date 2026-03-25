@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { FolderKanban, House, Mail, MessageSquareQuote, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
@@ -47,12 +47,16 @@ type DesktopRailButtonProps = NavItem & {
   onMouseLeave?: () => void
 }
 
+type MobileRailButtonProps = NavItem & {
+  buttonRef?: (node: HTMLElement | null) => void
+}
+
 function DesktopRailButton({ href, icon, label, onClick, isActive = false, expanded, onBlur, onFocus, onMouseEnter, onMouseLeave }: DesktopRailButtonProps) {
   const Component = href ? 'a' : 'button'
 
   return (
     <Component
-      {...(href ? { href } : { onClick, type: 'button' as const })}
+      {...(href ? { href, onClick } : { onClick, type: 'button' as const })}
       aria-current={isActive ? 'page' : undefined}
       onBlur={onBlur}
       onFocus={onFocus}
@@ -79,45 +83,54 @@ function DesktopRailButton({ href, icon, label, onClick, isActive = false, expan
   )
 }
 
-function MobileRailButton({ href, icon, label, onClick, isActive = false }: NavItem) {
-  const Component = href ? 'a' : 'button'
+function MobileRailButton({ href, icon, label, onClick, isActive = false, buttonRef }: MobileRailButtonProps) {
+  const className = [
+    'relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-2 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[flex-grow,color,transform] duration-300 ease-out max-[420px]:px-1.5 max-[420px]:py-2 max-[420px]:text-[0.62rem] max-[420px]:tracking-[0.1em] max-[360px]:gap-0.5 max-[360px]:px-1 max-[360px]:text-[0.58rem] max-[360px]:tracking-[0.08em]',
+    isActive ? 'max-[420px]:flex-[1.2] max-[360px]:flex-[1.35] text-white' : 'max-[420px]:flex-[0.9] max-[360px]:flex-[0.8] text-[color:var(--text-soft)]',
+  ].join(' ')
+
+  const labelClassName = [
+    'max-w-full truncate transition-all duration-300 ease-out',
+    isActive
+      ? 'max-[420px]:max-w-full max-[420px]:opacity-100'
+      : 'max-[420px]:max-h-0 max-[420px]:max-w-0 max-[420px]:opacity-0',
+  ].join(' ')
+
+  if (href) {
+    return (
+      <a ref={buttonRef} aria-current={isActive ? 'page' : undefined} className={className} href={href} onClick={onClick}>
+        <span>{icon}</span>
+        <span className={labelClassName}>{label}</span>
+      </a>
+    )
+  }
 
   return (
-    <Component
-      {...(href ? { href } : { onClick, type: 'button' as const })}
-      aria-current={isActive ? 'page' : undefined}
-      className={[
-        'flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-2 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[flex-grow,background-color,color,box-shadow] duration-200 max-[360px]:gap-0.5 max-[360px]:px-1 max-[360px]:py-2 max-[360px]:text-[0.58rem] max-[360px]:tracking-[0.08em]',
-        isActive ? 'max-[360px]:flex-[1.35]' : 'max-[360px]:flex-[0.8]',
-        isActive
-          ? 'bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_22px_var(--accent-shadow)]'
-          : 'text-[color:var(--text-soft)]',
-      ].join(' ')}
-    >
+    <button ref={buttonRef} aria-current={isActive ? 'page' : undefined} className={className} onClick={onClick} type="button">
       <span>{icon}</span>
-      <span
-        className={[
-          'max-w-full truncate transition-all duration-200',
-          isActive
-            ? 'max-[360px]:max-w-full max-[360px]:opacity-100'
-            : 'max-[360px]:max-h-0 max-[360px]:max-w-0 max-[360px]:opacity-0',
-        ].join(' ')}
-      >
-        {label}
-      </span>
-    </Component>
+      <span className={labelClassName}>{label}</span>
+    </button>
   )
 }
 
 export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHeaderProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [activeSection, setActiveSection] = useState<string | null>(null)
+  const [pendingSection, setPendingSection] = useState<string | null>(null)
+  const [mobileIndicatorStyle, setMobileIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({ left: 0, width: 0, opacity: 0 })
+  const mobileNavRef = useRef<HTMLElement | null>(null)
+  const mobileItemRefs = useRef<Record<string, HTMLElement | null>>({})
   const themeLockTimeoutRef = useRef<number | null>(null)
+  const pendingSectionTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     return () => {
       if (themeLockTimeoutRef.current !== null) {
         window.clearTimeout(themeLockTimeoutRef.current)
+      }
+
+      if (pendingSectionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingSectionTimeoutRef.current)
       }
     }
   }, [])
@@ -131,6 +144,20 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
   ], [])
 
   const nextThemeMode: ThemeMode = themeMode === 'system' ? 'light' : themeMode === 'light' ? 'dark' : 'system'
+  const visibleSection = pendingSection ?? activeSection
+
+  function primeSectionNavigation(sectionId: string) {
+    setPendingSection(sectionId)
+
+    if (pendingSectionTimeoutRef.current !== null) {
+      window.clearTimeout(pendingSectionTimeoutRef.current)
+    }
+
+    pendingSectionTimeoutRef.current = window.setTimeout(() => {
+      pendingSectionTimeoutRef.current = null
+      setPendingSection(null)
+    }, 700)
+  }
 
   useEffect(() => {
     let frameId: number | null = null
@@ -158,6 +185,15 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
         if (distance < closestDistance) {
           closestDistance = distance
           nextSection = sectionId
+        }
+
+        if (pendingSection === sectionId && distance <= 24) {
+          if (pendingSectionTimeoutRef.current !== null) {
+            window.clearTimeout(pendingSectionTimeoutRef.current)
+            pendingSectionTimeoutRef.current = null
+          }
+
+          setPendingSection(null)
         }
       }
 
@@ -193,7 +229,75 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
       window.removeEventListener('scroll', requestSectionUpdate)
       window.removeEventListener('resize', requestSectionUpdate)
     }
-  }, [links])
+  }, [links, pendingSection])
+
+  useLayoutEffect(() => {
+    let frameId: number | null = null
+    let timeoutId: number | null = null
+
+    const updateMobileIndicator = () => {
+      const activeId = visibleSection
+      const nav = mobileNavRef.current
+      const activeItem = activeId ? mobileItemRefs.current[activeId] : null
+
+      if (!nav || !activeItem) {
+        setMobileIndicatorStyle((current) => (current.opacity === 0 ? current : { ...current, opacity: 0 }))
+        return
+      }
+
+      setMobileIndicatorStyle({
+        left: activeItem.offsetLeft,
+        width: activeItem.offsetWidth,
+        opacity: 1,
+      })
+    }
+
+    const requestIndicatorUpdate = () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null
+        updateMobileIndicator()
+      })
+    }
+
+    requestIndicatorUpdate()
+    timeoutId = window.setTimeout(requestIndicatorUpdate, 180)
+    window.addEventListener('resize', requestIndicatorUpdate)
+
+    const resizeObserver = typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => {
+          requestIndicatorUpdate()
+        })
+      : null
+
+    if (resizeObserver) {
+      if (mobileNavRef.current) {
+        resizeObserver.observe(mobileNavRef.current)
+      }
+
+      Object.values(mobileItemRefs.current).forEach((item) => {
+        if (item) {
+          resizeObserver.observe(item)
+        }
+      })
+    }
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId)
+      }
+
+      window.removeEventListener('resize', requestIndicatorUpdate)
+      resizeObserver?.disconnect()
+    }
+  }, [links, visibleSection])
 
   function keepThemeButtonExpanded() {
     setExpandedItem('theme')
@@ -231,9 +335,10 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
             {links.map((item) => (
               <DesktopRailButton
                 {...item}
-                expanded={expandedItem === item.id}
-                isActive={activeSection === item.id}
+                expanded={expandedItem === item.id || visibleSection === item.id}
+                isActive={visibleSection === item.id}
                 key={item.label}
+                onClick={() => primeSectionNavigation(item.id)}
                 onBlur={() => setExpandedItem((currentItem) => (currentItem === item.id ? null : currentItem))}
                 onFocus={() => setExpandedItem(item.id)}
                 onMouseEnter={() => setExpandedItem(item.id)}
@@ -286,9 +391,26 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
           </button>
         </div>
 
-        <nav className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] max-[360px]:gap-1 max-[360px]:p-1.5 [view-transition-name:none]" aria-label="Navegacao principal mobile">
+        <nav ref={mobileNavRef} className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] max-[420px]:gap-1.5 max-[420px]:p-1.5 max-[360px]:gap-1 [view-transition-name:none]" aria-label="Navegacao principal mobile">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 bottom-2 top-2 rounded-[18px] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] shadow-[0_0_22px_var(--accent-shadow)] transition-[transform,width,opacity] duration-300 ease-out max-[420px]:bottom-1.5 max-[420px]:top-1.5"
+            style={{
+              opacity: mobileIndicatorStyle.opacity,
+              width: `${mobileIndicatorStyle.width}px`,
+              transform: `translateX(${mobileIndicatorStyle.left}px)`,
+            }}
+          />
           {links.map((item) => (
-            <MobileRailButton {...item} isActive={activeSection === item.id} key={item.label} />
+            <MobileRailButton
+              {...item}
+              buttonRef={(node) => {
+                mobileItemRefs.current[item.id] = node
+              }}
+              isActive={visibleSection === item.id}
+              key={item.label}
+              onClick={() => primeSectionNavigation(item.id)}
+            />
           ))}
         </nav>
       </header>
