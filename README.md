@@ -1,25 +1,46 @@
 # Novo Portfolio
 
-Portfolio pessoal desenvolvido com React, TypeScript, Vite e Tailwind CSS v4.
-O projeto apresenta uma landing page responsiva com visual glassmorphism, alternancia entre tema claro e escuro e formulario de contato integrado via FormSubmit.
+A personal portfolio built to present Danilo Gomes as a full stack developer through a polished, product-like web experience. The project combines atmospheric visuals, responsive layout decisions, and clear content structure to showcase services, selected work, recommendations, and contact options in a way that feels premium on both desktop and mobile.
 
-## Visao geral
+## Project Overview
 
-- Hero com apresentacao profissional e stack principal
-- Secoes de sobre, projetos, servicos e contato
-- Tema claro/escuro com persistencia em `localStorage`
-- Layout responsivo para desktop e mobile
-- Formulario com envio via `FormSubmit`
+- Premium portfolio landing page with a strong editorial and technological visual identity
+- Light and dark themes driven by CSS variables, with `system` mode and local persistence
+- Glassmorphism-based sections, subtle animated transitions, and atmospheric gradient backgrounds
+- Responsive layout with dedicated sections for hero, about, projects, recommendations, services, contact, and footer
+- Contact form flow prepared through `FormSubmit` using the `VITE_CONTACT_EMAIL` environment variable
 
-## Stack
+## Technologies Used
+
+### Core
 
 - React 19
 - TypeScript
 - Vite 8
 - Tailwind CSS 4
-- ESLint 9
 
-## Estrutura principal
+### UI and Styling
+
+- CSS custom properties for theming
+- Google Fonts: Outfit, Space Grotesk, IBM Plex Mono
+- `lucide-react` for icons
+
+### Tooling
+
+- ESLint 9
+- TypeScript compiler
+
+## Visual Identity Notes
+
+The interface follows a custom design language documented in `IDENTIDADE_VISUAL.md`, centered around:
+
+- Deep navy backgrounds with atmospheric gradients and soft glow layers
+- Glass panels with blur, delicate borders, and diffused shadows
+- Strong contrast between foreground content and background ambience
+- Expressive typography for headings and technical accents
+- Smooth, restrained motion that supports the experience without overwhelming it
+
+## Main Structure
 
 ```text
 src/
@@ -31,6 +52,7 @@ src/
     ContactSection.tsx
     HeroSection.tsx
     ProjectsSection.tsx
+    RecommendationsSection.tsx
     ServicesSection.tsx
     SiteFooter.tsx
     SiteHeader.tsx
@@ -38,36 +60,40 @@ src/
     ui.ts
 ```
 
-## Como rodar
+## Getting Started
 
-1. Instale as dependencias:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Copie as variaveis de ambiente:
+2. Create your environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-3. Defina seu email em `VITE_CONTACT_EMAIL` para ativar o formulario.
+3. Set `VITE_CONTACT_EMAIL` in `.env` to enable contact submissions.
 
-4. Inicie o projeto:
+4. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-## Scripts
+## Available Scripts
 
-- `npm run dev` inicia o servidor local
-- `npm run build` gera o build de producao
-- `npm run lint` executa a validacao com ESLint
-- `npm run preview` abre o build localmente
+- `npm run dev` - start the local development server
+- `npm run build` - generate the production build
+- `npm run lint` - run linting checks
+- `npm run preview` - preview the production build locally
 
-## Contato
+## Related Markdown Files
 
-O formulario usa o endpoint `https://formsubmit.co/ajax/<email-configurado>`.
-Se `VITE_CONTACT_EMAIL` nao estiver definido, o envio fica desativado e a interface mostra a orientacao de configuracao.
+- `GITHUB_PROFILE.md` - profile copy and GitHub presentation content
+- `IDENTIDADE_VISUAL.md` - reusable visual identity system for this portfolio
+
+## Contact Flow
+
+The contact form uses the endpoint `https://formsubmit.co/ajax/<configured-email>`. If `VITE_CONTACT_EMAIL` is not set, the UI keeps the submission flow disabled and guides the user through the missing configuration.
