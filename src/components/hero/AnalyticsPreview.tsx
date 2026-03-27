@@ -4,7 +4,6 @@ import { labelClass } from '../ui'
 import {
   buildAreaPath,
   buildLinePath,
-  previewAmbientClass,
   previewInnerPanelClass,
   previewPanelClass,
   type WeatherData,
@@ -28,8 +27,6 @@ export function AnalyticsPreview({ weather }: { weather: WeatherData }) {
 
   return (
     <div className={`${previewPanelClass} p-5`}>
-      <div className={previewAmbientClass} />
-
       <div className="flex items-center justify-between">
         <span className={labelClass}>Open-Meteo</span>
         <span className="text-xs uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
@@ -53,8 +50,8 @@ export function AnalyticsPreview({ weather }: { weather: WeatherData }) {
           </div>
         </div>
 
-        <div className="relative h-40 overflow-hidden rounded-[18px] border border-[rgba(190,230,255,0.1)] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(128,186,255,0.04))] backdrop-blur-[18px]">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:100%_25%,14.28%_100%] opacity-35" />
+        <div className="relative h-40 overflow-hidden rounded-[18px] border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)]">
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--preview-chart-grid)_1px,transparent_1px),linear-gradient(to_right,var(--preview-chart-grid-strong)_1px,transparent_1px)] bg-[size:100%_25%,14.28%_100%] opacity-50" />
 
           <svg
             aria-hidden="true"
@@ -64,13 +61,13 @@ export function AnalyticsPreview({ weather }: { weather: WeatherData }) {
           >
             <defs>
               <linearGradient id="weather-area" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="rgba(91,240,255,0.34)" />
-                <stop offset="100%" stopColor="rgba(91,240,255,0)" />
+                <stop offset="0%" stopColor="var(--preview-chart-fill-start)" />
+                <stop offset="100%" stopColor="var(--preview-chart-fill-end)" />
               </linearGradient>
             </defs>
 
             <path d={areaPath} fill="url(#weather-area)" />
-            <path d={linePath} stroke="rgba(91,240,255,0.96)" strokeLinecap="round" strokeWidth="3" />
+            <path d={linePath} stroke="var(--preview-chart-line)" strokeLinecap="round" strokeWidth="3" />
           </svg>
 
           <div className="absolute inset-x-3 bottom-3 flex justify-between text-[10px] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">

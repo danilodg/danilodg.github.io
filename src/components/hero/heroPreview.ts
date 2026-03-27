@@ -60,13 +60,10 @@ export const fallbackMarket: MarketAsset[] = [
 ]
 
 export const previewPanelClass =
-  'group relative isolate overflow-hidden rounded-[30px] border border-[rgba(160,220,255,0.2)] bg-[linear-gradient(180deg,rgba(12,24,56,0.82),rgba(6,12,28,0.68))] shadow-[0_28px_70px_rgba(0,0,0,0.28)] backdrop-blur-[24px] transition duration-300 hover:-translate-y-2 hover:scale-[1.01] hover:border-[rgba(160,220,255,0.32)] hover:shadow-[0_34px_90px_rgba(0,0,0,0.34)]'
-
-export const previewAmbientClass =
-  'pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_18%,rgba(117,240,255,0.22),transparent_30%),radial-gradient(circle_at_82%_24%,rgba(123,163,255,0.18),transparent_28%),radial-gradient(circle_at_50%_100%,rgba(56,97,180,0.22),transparent_46%)] opacity-90 blur-2xl transition duration-300 group-hover:opacity-100 group-hover:blur-[42px]'
+  'group relative isolate overflow-hidden rounded-[30px] border border-[color:var(--preview-panel-border)] bg-[var(--preview-panel-bg)] shadow-[var(--preview-panel-shadow)] backdrop-blur-[24px] transition duration-300 hover:-translate-y-2 hover:scale-[1.01] hover:border-[color:var(--preview-panel-hover-border)] hover:shadow-[var(--preview-panel-hover-shadow)]'
 
 export const previewInnerPanelClass =
-  'mt-4 rounded-[24px] border border-[rgba(190,230,255,0.12)] bg-[linear-gradient(180deg,rgba(11,21,51,0.78),rgba(6,11,28,0.74))] p-4 backdrop-blur-[18px]'
+  'mt-4 rounded-[24px] border border-[color:var(--preview-inner-border)] bg-[var(--preview-inner-bg)] p-4'
 
 export function buildLinePath(values: number[], width: number, height: number, padding: number) {
   if (values.length === 0) {

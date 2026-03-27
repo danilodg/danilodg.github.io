@@ -2,7 +2,6 @@ import { labelClass } from '../ui'
 import {
   formatCurrency,
   formatPercent,
-  previewAmbientClass,
   previewInnerPanelClass,
   previewPanelClass,
   type MarketAsset,
@@ -14,11 +13,7 @@ export function RevenuePreview({ market }: { market: MarketAsset[] }) {
   )
 
   return (
-    <div
-      className={`${previewPanelClass} bg-[linear-gradient(180deg,rgba(18,32,72,0.86),rgba(7,12,28,0.74))] p-5 backdrop-blur-[24px]`}
-    >
-      <div className={previewAmbientClass} />
-
+    <div className={`${previewPanelClass} p-5`}>
       <div className="flex items-center justify-between">
         <span className={labelClass}>CoinGecko</span>
         <span className="text-xs uppercase tracking-[0.16em] text-[color:var(--text-muted)]">BRL market</span>
@@ -29,7 +24,7 @@ export function RevenuePreview({ market }: { market: MarketAsset[] }) {
 
         <div className="mt-4 space-y-3">
           {market.map((asset) => (
-            <div className="flex items-center justify-between rounded-2xl border border-[rgba(190,230,255,0.1)] bg-[rgba(255,255,255,0.045)] px-3 py-2.5" key={asset.id}>
+            <div className="flex items-center justify-between rounded-2xl border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5" key={asset.id}>
               <div>
                 <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
                   {asset.symbol}
@@ -50,7 +45,7 @@ export function RevenuePreview({ market }: { market: MarketAsset[] }) {
           ))}
         </div>
 
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-[rgba(190,230,255,0.1)] bg-[rgba(255,255,255,0.045)] px-3 py-2.5">
+        <div className="mt-4 flex items-center justify-between rounded-2xl border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
               Melhor 24h

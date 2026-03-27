@@ -114,8 +114,6 @@ export function HeroSection() {
   return (
     <section className="relative" id="inicio">
       <div className={`${glassPanel} relative z-10 p-6 sm:p-8 lg:p-12`}>
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] bg-[radial-gradient(circle_at_30%_45%,rgba(92,140,255,0.28),transparent_40%),radial-gradient(circle_at_70%_72%,rgba(216,100,255,0.2),transparent_34%)] lg:block" />
-
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-center">
           <div className="relative z-10">
             <span className={labelClass}>Portfolio</span>
@@ -161,7 +159,6 @@ export function HeroSection() {
             <div className="absolute left-[10%] top-55 z-40 w-[70%] hover:z-50">
               <RevenuePreview market={market} />
             </div>
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_35%,rgba(117,240,255,0.18),transparent_24%),radial-gradient(circle_at_72%_70%,rgba(116,153,255,0.18),transparent_24%)] blur-3xl" />
           </div>
         </div>
       </div>
