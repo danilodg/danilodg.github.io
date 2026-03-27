@@ -59,8 +59,10 @@ const themes: Record<Theme, CSSProperties> = {
     '--page-radial': 'rgba(37,60,148,0.45)',
     '--page-gradient': 'linear-gradient(180deg,#040716 0%,#071028 45%,#060917 100%)',
     '--grid-color': 'rgba(112,151,255,0.07)',
-    '--glow-left': 'rgba(72,205,255,0.42)',
-    '--glow-right': 'rgba(138,92,255,0.34)',
+    '--glow-left': 'rgba(72,205,255,0.34)',
+    '--glow-right': 'rgba(138,92,255,0.26)',
+    '--glow-bottom': 'rgba(68,114,255,0.24)',
+    '--glow-bottom-alt': 'rgba(54,190,255,0.18)',
     '--text-main': '#f8fbff',
     '--text-soft': '#c5d0ef',
     '--text-muted': '#94a3c7',
@@ -107,8 +109,10 @@ const themes: Record<Theme, CSSProperties> = {
     '--page-radial': 'rgba(87,151,255,0.22)',
     '--page-gradient': 'linear-gradient(180deg,#f9fbff 0%,#edf4ff 42%,#e4eeff 100%)',
     '--grid-color': 'rgba(74,113,205,0.08)',
-    '--glow-left': 'rgba(98,201,255,0.24)',
-    '--glow-right': 'rgba(131,118,255,0.18)',
+    '--glow-left': 'rgba(98,201,255,0.2)',
+    '--glow-right': 'rgba(131,118,255,0.14)',
+    '--glow-bottom': 'rgba(94,138,255,0.16)',
+    '--glow-bottom-alt': 'rgba(70,198,255,0.12)',
     '--text-main': '#13203f',
     '--text-soft': '#42557d',
     '--text-muted': '#607297',
@@ -267,10 +271,12 @@ function App() {
       data-theme-mode={themeMode}
       style={themeStyle}
     >
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,var(--page-radial),transparent_34%),var(--page-gradient)]" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,var(--page-radial),transparent_36%),var(--page-gradient)]" />
       <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(var(--grid-color)_1px,transparent_1px),linear-gradient(90deg,var(--grid-color)_1px,transparent_1px)] bg-[size:72px_72px] opacity-30 [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.35),transparent_85%)]" />
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_50%,var(--glow-left),transparent_28%)] blur-3xl" />
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_78%_60%,var(--glow-right),transparent_26%)] blur-3xl" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_18%_24%,var(--glow-left),transparent_30%)] blur-3xl" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_82%_34%,var(--glow-right),transparent_28%)] blur-3xl" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_88%,var(--glow-bottom),transparent_34%)] blur-3xl" />
+      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_18%_92%,var(--glow-bottom-alt),transparent_24%)] blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-4 py-6 pb-28 sm:px-5 lg:px-8 lg:py-8 lg:pl-28 lg:pb-8">
         <SiteHeader
