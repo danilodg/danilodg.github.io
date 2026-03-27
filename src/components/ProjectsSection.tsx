@@ -1,18 +1,16 @@
-import { services } from './data'
+import type { SiteContent } from '../content'
 import { glassPanel, labelClass, sectionTitleClass } from './ui'
 
-export function ProjectsSection() {
+export function ProjectsSection({ content }: { content: SiteContent['servicesSection'] }) {
   return (
     <section className="mt-20 lg:mt-28" id="projetos">
       <div className="mb-7 max-w-[740px]">
-        <span className={labelClass}>Servicos</span>
-        <h2 className={sectionTitleClass}>
-          Solucoes que posso desenvolver para o seu negocio ou produto
-        </h2>
+        <span className={labelClass}>{content.label}</span>
+        <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {services.map((service) => (
+        {content.items.map((service) => (
           <article className={`${glassPanel} flex h-full flex-col p-6`} key={service.title}>
             <span className={labelClass}>{service.category}</span>
             <h3 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.4rem] font-bold text-[color:var(--text-main)]">

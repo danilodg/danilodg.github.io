@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { completedProjects } from './data'
+import type { SiteContent } from '../content'
 import {
   glassPanel,
   labelClass,
@@ -8,20 +8,18 @@ import {
   sectionTitleClass,
 } from './ui'
 
-export function ServicesSection() {
-  const [selectedProject, setSelectedProject] = useState<(typeof completedProjects)[number] | null>(null)
+export function ServicesSection({ content }: { content: SiteContent['projectsSection'] }) {
+  const [selectedProject, setSelectedProject] = useState<SiteContent['projectsSection']['items'][number] | null>(null)
 
   return (
     <section className="mt-20 lg:mt-28" id="servicos">
       <div className="mb-7 max-w-[740px]">
-        <span className={labelClass}>Projetos</span>
-        <h2 className={sectionTitleClass}>
-          Alguns projetos que ja tiramos do papel
-        </h2>
+        <span className={labelClass}>{content.label}</span>
+        <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {completedProjects.map((project) => (
+        {content.items.map((project) => (
           <button
             className={`${glassPanel} group overflow-hidden p-0 text-left transition duration-300 hover:-translate-y-1`}
             key={project.title}
@@ -59,7 +57,7 @@ export function ServicesSection() {
               </div>
 
               <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-soft)]">
-                Ver mais detalhes
+                {content.viewMore}
                 <span aria-hidden="true">+</span>
               </span>
             </div>
@@ -94,14 +92,14 @@ export function ServicesSection() {
               <div className="flex max-h-[90vh] flex-col overflow-y-auto p-6 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <span className={labelClass}>Projeto em destaque</span>
+                    <span className={labelClass}>{content.featuredLabel}</span>
                     <h3 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.75rem] font-bold leading-tight text-[color:var(--text-main)]">
                       {selectedProject.title}
                     </h3>
                   </div>
 
                   <button
-                    aria-label="Fechar modal"
+                    aria-label={content.closeModal}
                     className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--chip-border)] bg-[var(--chip-bg)] text-[color:var(--text-main)] transition hover:-translate-y-0.5"
                     onClick={() => setSelectedProject(null)}
                     type="button"
@@ -133,7 +131,7 @@ export function ServicesSection() {
                 </div>
 
                 <a className={`${primaryButtonClass} mt-8`} href="#contato">
-                  Quero um projeto nesse nivel
+                  {content.cta}
                 </a>
               </div>
             </div>

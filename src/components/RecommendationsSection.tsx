@@ -1,18 +1,16 @@
-import { recommendations } from './data'
+import type { SiteContent } from '../content'
 import { glassPanel, labelClass, sectionTitleClass } from './ui'
 
-export function RecommendationsSection() {
+export function RecommendationsSection({ content }: { content: SiteContent['recommendationsSection'] }) {
   return (
     <section className="mt-20 lg:mt-28" id="recomendacoes">
       <div className="mb-7 max-w-[760px]">
-        <span className={labelClass}>Recomendacoes</span>
-        <h2 className={sectionTitleClass}>
-          Percepcao de quem ja construiu projetos e processos comigo
-        </h2>
+        <span className={labelClass}>{content.label}</span>
+        <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {recommendations.map((recommendation) => (
+        {content.items.map((recommendation) => (
           <article className={`${glassPanel} flex h-full flex-col p-6`} key={recommendation.name}>
             <span className="text-4xl leading-none text-[color:var(--accent-line)]">"</span>
             <p className="mt-4 text-[color:var(--text-soft)]">{recommendation.quote}</p>

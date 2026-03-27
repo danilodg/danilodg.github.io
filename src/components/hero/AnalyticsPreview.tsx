@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import type { SiteContent } from '../../content'
 import { labelClass } from '../ui'
 import {
   buildAreaPath,
@@ -10,7 +11,7 @@ import {
   weatherConfig,
 } from './heroPreview'
 
-export function AnalyticsPreview({ weather }: { weather: WeatherData }) {
+export function AnalyticsPreview({ content, weather }: { content: SiteContent['preview']; weather: WeatherData }) {
   const chartWidth = 320
   const chartHeight = 120
   const chartPadding = 10
@@ -38,13 +39,13 @@ export function AnalyticsPreview({ weather }: { weather: WeatherData }) {
         <div className="mb-4 flex items-end justify-between gap-4">
           <div>
             <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
-              Maxima 7 dias
+              {content.analytics.maxLabel}
             </span>
             <strong className="mt-1 block text-2xl text-[color:var(--text-main)]">{maxTemp.toFixed(1)} C</strong>
           </div>
           <div className="text-right">
             <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
-              Minima
+              {content.analytics.minLabel}
             </span>
             <span className="mt-1 block text-sm text-[color:var(--text-soft)]">{minTemp.toFixed(1)} C</span>
           </div>

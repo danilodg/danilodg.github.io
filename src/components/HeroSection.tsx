@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 
+import type { Language, SiteContent } from '../content'
+import { technologies } from '../content'
 import { AnalyticsPreview } from './hero/AnalyticsPreview'
 import { CodePreview } from './hero/CodePreview'
 import { RevenuePreview } from './hero/RevenuePreview'
-import { technologies } from './data'
 import {
-  fallbackGitHub,
-  fallbackMarket,
-  fallbackWeather,
   formatShortDate,
+  getFallbackGitHub,
+  getFallbackWeather,
   githubUsername,
   type GitHubData,
   type MarketAsset,
@@ -22,13 +22,28 @@ import {
   secondaryButtonClass,
 } from './ui'
 
-export function HeroSection() {
-  const [weather, setWeather] = useState<WeatherData>(fallbackWeather)
-  const [github, setGitHub] = useState<GitHubData>(fallbackGitHub)
+type HeroSectionProps = {
+  content: SiteContent
+  language: Language
+}
+
+const fallbackMarket: MarketAsset[] = [
+  { id: 'bitcoin', symbol: 'BTC', name: 'Bitcoin', currentPrice: 371064, change24h: 0.61 },
+  { id: 'ethereum', symbol: 'ETH', name: 'Ethereum', currentPrice: 11308.76, change24h: 0.26 },
+  { id: 'solana', symbol: 'SOL', name: 'Solana', currentPrice: 480.41, change24h: 1.4 },
+]
+
+export function HeroSection({ content, language }: HeroSectionProps) {
+  const [weather, setWeather] = useState<WeatherData>(() => getFallbackWeather(language))
+  const [github, setGitHub] = useState<GitHubData>(() => getFallbackGitHub(content.preview))
   const [market, setMarket] = useState<MarketAsset[]>(fallbackMarket)
 
   useEffect(() => {
     const abortController = new AbortController()
+
+    setWeather(getFallbackWeather(language))
+    setGitHub(getFallbackGitHub(content.preview))
+    setMarket(fallbackMarket)
 
     async function loadHeroData() {
       const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${weatherConfig.latitude}&longitude=${weatherConfig.longitude}&daily=temperature_2m_max&timezone=${weatherConfig.timezone}&forecast_days=7`
@@ -47,7 +62,7 @@ export function HeroSection() {
       if (weatherResult.status === 'fulfilled' && weatherResult.value.ok) {
         const weatherPayload = await weatherResult.value.json()
         const labels = weatherPayload.daily?.time?.map((dateValue: string) =>
-          new Intl.DateTimeFormat('pt-BR', { weekday: 'short' })
+          new Intl.DateTimeFormat(language === 'pt' ? 'pt-BR' : 'en-US', { weekday: 'short' })
             .format(new Date(dateValue))
             .replace('.', '')
             .slice(0, 3),
@@ -75,15 +90,15 @@ export function HeroSection() {
 
         if (profilePayload?.login && Array.isArray(reposPayload)) {
           setGitHub({
-            name: profilePayload.name || fallbackGitHub.name,
+            name: profilePayload.name || getFallbackGitHub(content.preview).name,
             login: profilePayload.login,
-            publicRepos: profilePayload.public_repos ?? fallbackGitHub.publicRepos,
-            followers: profilePayload.followers ?? fallbackGitHub.followers,
-            following: profilePayload.following ?? fallbackGitHub.following,
+            publicRepos: profilePayload.public_repos ?? getFallbackGitHub(content.preview).publicRepos,
+            followers: profilePayload.followers ?? getFallbackGitHub(content.preview).followers,
+            following: profilePayload.following ?? getFallbackGitHub(content.preview).following,
             recentRepos: reposPayload.slice(0, 3).map((repo: Record<string, unknown>) => ({
               name: String(repo.name ?? 'repo'),
-              language: String(repo.language ?? 'Sem linguagem'),
-              updatedAt: formatShortDate(String(repo.pushed_at ?? '')),
+              language: String(repo.language ?? content.preview.githubFallback.noLanguage),
+              updatedAt: formatShortDate(String(repo.pushed_at ?? ''), language, content.preview),
             })),
           })
         }
@@ -109,35 +124,34 @@ export function HeroSection() {
     loadHeroData().catch(() => undefined)
 
     return () => abortController.abort()
-  }, [])
+  }, [content.preview, language])
 
   return (
     <section className="relative" id="inicio">
       <div className={`${glassPanel} relative z-10 p-6 sm:p-8 lg:p-12`}>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-center">
           <div className="relative z-10">
-            <span className={labelClass}>Portfolio</span>
+            <span className={labelClass}>{content.hero.label}</span>
             <h1 className="mt-6 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(2.9rem,10vw,5.6rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[color:var(--text-main)]">
               Danilo Gomes
             </h1>
             <p className="mt-3 text-[clamp(1.45rem,2vw,2.3rem)] text-[color:var(--text-main)]">
-              Desenvolvedor Full Stack
+              {content.hero.role}
             </p>
             <p className="mt-5 max-w-[38rem] text-base text-[color:var(--text-soft)] sm:text-[1.06rem]">
-              Construo experiencias web modernas com visual marcante, codigo bem
-              estruturado e solucoes pensadas para negocio.
+              {content.hero.description}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3.5">
               <a className={primaryButtonClass} href="#projetos">
-                Ver projetos
+                {content.hero.primaryCta}
               </a>
               <a className={secondaryButtonClass} href="#contato">
-                Falar comigo
+                {content.hero.secondaryCta}
               </a>
             </div>
 
-            <ul className="mt-10 flex max-w-[760px] flex-wrap gap-3" aria-label="Principais tecnologias">
+            <ul className="mt-10 flex max-w-[760px] flex-wrap gap-3" aria-label={content.hero.technologiesAriaLabel}>
               {technologies.map((technology) => (
                 <li
                   key={technology}
@@ -151,13 +165,13 @@ export function HeroSection() {
 
           <div className="relative hidden min-h-[640px] overflow-visible lg:block">
             <div className="absolute -left-10 top-[3.75rem] z-20 w-[60%] opacity-95 hover:z-50">
-              <AnalyticsPreview weather={weather} />
+              <AnalyticsPreview content={content.preview} weather={weather} />
             </div>
             <div className="absolute -right-0 -top-0 z-30 w-[70%] hover:z-50">
-              <CodePreview github={github} />
+              <CodePreview content={content.preview} github={github} />
             </div>
             <div className="absolute left-[10%] top-55 z-40 w-[70%] hover:z-50">
-              <RevenuePreview market={market} />
+              <RevenuePreview content={content.preview} language={language} market={market} />
             </div>
           </div>
         </div>

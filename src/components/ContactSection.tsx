@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 
+import type { SiteContent } from '../content'
 import { glassPanel, labelClass, primaryButtonClass, sectionTitleClass } from './ui'
 
 type FormStatus =
@@ -13,14 +14,18 @@ const inputClass =
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
 
-export function ContactSection() {
+export function ContactSection({ content }: { content: SiteContent['contact'] }) {
   const [status, setStatus] = useState<FormStatus>({
     type: 'idle',
-    message: 'Preencha os campos para enviar sua mensagem.',
+    message: content.status.idle,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const endpoint = contactEmail ? `https://formsubmit.co/ajax/${contactEmail}` : ''
+
+  useEffect(() => {
+    setStatus((currentStatus) => (currentStatus.type === 'idle' ? { type: 'idle', message: content.status.idle } : currentStatus))
+  }, [content.status.idle])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -28,8 +33,7 @@ export function ContactSection() {
     if (!endpoint) {
       setStatus({
         type: 'error',
-        message:
-          'Defina `VITE_CONTACT_EMAIL` para ativar o envio automatico do formulario.',
+        message: content.status.missingEmail,
       })
       return
     }
@@ -38,7 +42,7 @@ export function ContactSection() {
     const formData = new FormData(form)
 
     setIsSubmitting(true)
-    setStatus({ type: 'idle', message: 'Enviando mensagem...' })
+    setStatus({ type: 'idle', message: content.status.sending })
 
     try {
       const response = await fetch(endpoint, {
@@ -50,18 +54,18 @@ export function ContactSection() {
       })
 
       if (!response.ok) {
-        throw new Error('Nao foi possivel enviar agora.')
+        throw new Error(content.status.submitError)
       }
 
       form.reset()
       setStatus({
         type: 'success',
-        message: 'Mensagem enviada com sucesso. Vou te responder em breve.',
+        message: content.status.success,
       })
     } catch {
       setStatus({
         type: 'error',
-        message: 'O envio falhou. Tente novamente em alguns instantes.',
+        message: content.status.error,
       })
     } finally {
       setIsSubmitting(false)
@@ -71,50 +75,47 @@ export function ContactSection() {
   return (
     <section className="mt-20 lg:mt-28" id="contato">
       <div className="mb-7 max-w-[740px]">
-        <span className={labelClass}>Contato</span>
-        <h2 className={sectionTitleClass}>Vamos transformar sua ideia em projeto</h2>
+        <span className={labelClass}>{content.label}</span>
+        <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div className={`${glassPanel} flex flex-col gap-5 p-7`}>
-          <p className="max-w-[34rem] text-[color:var(--text-soft)]">
-            Se voce quer tirar um projeto do papel, melhorar um sistema atual ou
-            criar uma interface com presenca mais forte, me envie uma mensagem.
-          </p>
+          <p className="max-w-[34rem] text-[color:var(--text-soft)]">{content.intro}</p>
 
           <div className="grid gap-4 text-sm text-[color:var(--text-soft)]">
             <div>
-              <span className="mb-1 block text-[color:var(--text-main)]">Resposta</span>
-              <p>Retorno por email com alinhamento inicial e proximos passos.</p>
+              <span className="mb-1 block text-[color:var(--text-main)]">{content.responseTitle}</span>
+              <p>{content.responseText}</p>
             </div>
             <div>
-              <span className="mb-1 block text-[color:var(--text-main)]">Foco</span>
-              <p>Sites profissionais, sistemas web, APIs e melhorias visuais.</p>
+              <span className="mb-1 block text-[color:var(--text-main)]">{content.focusTitle}</span>
+              <p>{content.focusText}</p>
             </div>
             <div>
-              <span className="mb-1 block text-[color:var(--text-main)]">Canal direto</span>
-              <p>{contactEmail || 'Configure seu email para ativar o envio real.'}</p>
+              <span className="mb-1 block text-[color:var(--text-main)]">{content.directChannelTitle}</span>
+              <p>{contactEmail || content.directChannelFallback}</p>
             </div>
           </div>
         </div>
 
         <form className={`${glassPanel} grid gap-4 p-7`} onSubmit={handleSubmit}>
-          <input name="_subject" type="hidden" value="Novo contato pelo portfolio" />
+          <input name="_subject" type="hidden" value={content.subjectValue} />
           <input name="_captcha" type="hidden" value="false" />
           <input name="_template" type="hidden" value="table" />
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-              <span>Nome</span>
-              <input className={inputClass} name="name" placeholder="Seu nome" required />
+              <span>{content.formLabels.name}</span>
+              <input className={inputClass} name="name" placeholder={content.placeholders.name} required />
             </label>
 
             <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-              <span>Email</span>
+              <span>{content.formLabels.email}</span>
               <input
                 className={inputClass}
                 name="email"
-                placeholder="voce@email.com"
+                placeholder={content.placeholders.email}
                 required
                 type="email"
               />
@@ -122,16 +123,16 @@ export function ContactSection() {
           </div>
 
           <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-            <span>Assunto</span>
-            <input className={inputClass} name="title" placeholder="Sobre o que voce quer conversar?" required />
+            <span>{content.formLabels.subject}</span>
+            <input className={inputClass} name="title" placeholder={content.placeholders.subject} required />
           </label>
 
           <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-            <span>Mensagem</span>
+            <span>{content.formLabels.message}</span>
             <textarea
               className={`${inputClass} min-h-36 resize-y`}
               name="message"
-              placeholder="Me conte um pouco sobre seu projeto"
+              placeholder={content.placeholders.message}
               required
             />
           </label>
@@ -151,7 +152,7 @@ export function ContactSection() {
             </p>
 
             <button className={primaryButtonClass} disabled={isSubmitting} type="submit">
-              {isSubmitting ? 'Enviando...' : 'Enviar mensagem'}
+              {isSubmitting ? content.submitting : content.submit}
             </button>
           </div>
         </form>

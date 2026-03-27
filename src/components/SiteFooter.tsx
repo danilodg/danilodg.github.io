@@ -1,3 +1,4 @@
+import type { SiteContent } from '../content'
 import { glassPanel, labelClass } from './ui'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
@@ -27,18 +28,18 @@ function MailIcon() {
   )
 }
 
-export function SiteFooter() {
+export function SiteFooter({ content }: { content: SiteContent['footer'] }) {
   return (
     <footer
       className={`${glassPanel} mt-20 grid gap-8 p-6 sm:p-7 lg:mt-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end`}
     >
       <div className="max-w-[34rem]">
-        <span className={labelClass}>Contato direto</span>
+        <span className={labelClass}>{content.label}</span>
         <h2 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(1.6rem,4vw,2.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-[color:var(--text-main)]">
-          Vamos conversar sobre o seu proximo projeto
+          {content.title}
         </h2>
         <p className="mt-4 text-[color:var(--text-soft)]">
-          Se voce precisa de uma landing page, dashboard ou sistema web, eu posso te ajudar a transformar a ideia em uma entrega clara e bem resolvida.
+          {content.description}
         </p>
       </div>
 
@@ -76,7 +77,7 @@ export function SiteFooter() {
         </div>
 
         <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-          Disponivel para novos projetos e freelas
+          {content.availability}
         </p>
       </div>
     </footer>

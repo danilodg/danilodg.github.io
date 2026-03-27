@@ -2,13 +2,17 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { FolderKanban, House, Mail, MessageSquareQuote, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
+import type { Language, SiteContent } from '../content'
 
 type Theme = 'dark' | 'light'
 type ThemeMode = Theme | 'system'
 
 type SiteHeaderProps = {
+  content: SiteContent
   effectiveTheme: Theme
+  language: Language
   themeMode: ThemeMode
+  onSelectLanguage: (language: Language) => void
   onSelectTheme: (themeMode: ThemeMode) => void
 }
 
@@ -21,12 +25,6 @@ type NavItem = {
   isActive?: boolean
 }
 
-const themeLabels: Record<ThemeMode, string> = {
-  system: 'Sistema',
-  light: 'Claro',
-  dark: 'Escuro',
-}
-
 function ThemeIcon({ effectiveTheme, themeMode }: Pick<SiteHeaderProps, 'effectiveTheme' | 'themeMode'>) {
   if (themeMode === 'system') {
     return <Monitor className="h-5 w-5" strokeWidth={1.8} />
@@ -37,6 +35,44 @@ function ThemeIcon({ effectiveTheme, themeMode }: Pick<SiteHeaderProps, 'effecti
   }
 
   return <SunMedium className="h-5 w-5" strokeWidth={1.8} />
+}
+
+function LanguageSelect({ content, language, onSelectLanguage, compact = false }: Pick<SiteHeaderProps, 'content' | 'language' | 'onSelectLanguage'> & { compact?: boolean }) {
+  return (
+    <div
+      className={[
+        'inline-flex items-center gap-2 rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px]',
+        compact ? 'h-11 px-2.5' : 'h-14 px-3',
+      ].join(' ')}
+    >
+      <span className={compact ? 'pl-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-[color:var(--text-muted)]' : 'pl-1 text-[0.68rem] font-medium uppercase tracking-[0.16em] text-[color:var(--text-muted)]'}>
+        {content.languageLabel}
+      </span>
+
+      <div className="flex items-center rounded-[16px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] p-1">
+        {(['pt', 'en'] as const).map((option) => {
+          const active = language === option
+
+          return (
+            <button
+              aria-pressed={active}
+              className={[
+                'inline-flex min-w-11 items-center justify-center rounded-[12px] px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em] transition',
+                active
+                  ? 'bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_18px_var(--accent-shadow)]'
+                  : 'text-[color:var(--text-soft)] hover:text-[color:var(--text-main)]',
+              ].join(' ')}
+              key={option}
+              onClick={() => onSelectLanguage(option)}
+              type="button"
+            >
+              {content.languageOptions[option]}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 type DesktopRailButtonProps = NavItem & {
@@ -113,7 +149,7 @@ function MobileRailButton({ href, icon, label, onClick, isActive = false, button
   )
 }
 
-export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHeaderProps) {
+export function SiteHeader({ content, effectiveTheme, language, themeMode, onSelectLanguage, onSelectTheme }: SiteHeaderProps) {
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [pendingSection, setPendingSection] = useState<string | null>(null)
@@ -136,12 +172,12 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
   }, [])
 
   const links: NavItem[] = useMemo(() => [
-    { id: 'sobre', href: '#sobre', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: 'Sobre' },
-    { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: 'Servicos' },
-    { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: 'Reviews' },
-    { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: 'Projetos' },
-    { id: 'contato', href: '#contato', icon: <Mail className="h-5 w-5" strokeWidth={1.8} />, label: 'Contato' },
-  ], [])
+    { id: 'sobre', href: '#sobre', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.about },
+    { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.services },
+    { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.recommendations },
+    { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.projects },
+    { id: 'contato', href: '#contato', icon: <Mail className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.contact },
+  ], [content.nav])
 
   const nextThemeMode: ThemeMode = themeMode === 'system' ? 'light' : themeMode === 'light' ? 'dark' : 'system'
   const visibleSection = pendingSection ?? activeSection
@@ -326,7 +362,7 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
             <span className="min-w-max whitespace-nowrap pr-6 opacity-100">
               <strong className="block whitespace-nowrap text-[0.95rem] font-semibold">Danilo Gomes</strong>
               <span className="block text-[0.72rem] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-                Desenvolvedor Full Stack
+                {content.hero.role}
               </span>
             </span>
           </a>
@@ -352,7 +388,7 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
             id="theme"
             expanded={expandedItem === 'theme'}
             isActive
-            label={themeLabels[themeMode]}
+            label={content.themeLabels[themeMode]}
             onBlur={() => setExpandedItem((currentItem) => (currentItem === 'theme' ? null : currentItem))}
             onClick={() => {
               keepThemeButtonExpanded()
@@ -367,6 +403,10 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
             }}
           />
         </div>
+
+        <div className="fixed bottom-8 right-6 z-30 [view-transition-name:none]">
+          <LanguageSelect content={content} language={language} onSelectLanguage={onSelectLanguage} />
+        </div>
       </header>
 
       <header className="lg:hidden">
@@ -376,19 +416,23 @@ export function SiteHeader({ effectiveTheme, themeMode, onSelectTheme }: SiteHea
             <span>
               <strong className="block text-sm font-semibold">Danilo Gomes</strong>
               <span className="block text-[0.68rem] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-                Full Stack
+                {content.hero.role}
               </span>
             </span>
           </a>
 
-          <button
-            className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--nav-border)] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] px-4 text-white shadow-[0_0_22px_var(--accent-shadow)]"
-            onClick={() => onSelectTheme(nextThemeMode)}
-            type="button"
-          >
-            <span className="mr-2"><ThemeIcon effectiveTheme={effectiveTheme} themeMode={themeMode} /></span>
-            <span className="text-xs font-medium uppercase tracking-[0.14em]">{themeLabels[themeMode]}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <LanguageSelect compact content={content} language={language} onSelectLanguage={onSelectLanguage} />
+
+            <button
+              className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--nav-border)] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] px-4 text-white shadow-[0_0_22px_var(--accent-shadow)]"
+              onClick={() => onSelectTheme(nextThemeMode)}
+              type="button"
+            >
+              <span className="mr-2"><ThemeIcon effectiveTheme={effectiveTheme} themeMode={themeMode} /></span>
+              <span className="text-xs font-medium uppercase tracking-[0.14em]">{content.themeLabels[themeMode]}</span>
+            </button>
+          </div>
         </div>
 
         <nav ref={mobileNavRef} className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] max-[420px]:gap-1.5 max-[420px]:p-1.5 max-[360px]:gap-1 [view-transition-name:none]" aria-label="Navegacao principal mobile">

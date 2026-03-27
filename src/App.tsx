@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties } from 'react'
 
+import { siteContent, type Language } from './content'
 import { AboutSection } from './components/AboutSection'
 import { ContactSection } from './components/ContactSection'
 import { HeroSection } from './components/HeroSection'
@@ -18,6 +19,39 @@ type DocumentWithTransition = Document & {
 }
 
 const themeStorageKey = 'theme-mode'
+
+function getLanguageFromUrl(url: URL): Language | null {
+  const queryLanguage = url.searchParams.get('lang')
+  if (queryLanguage === 'pt' || queryLanguage === 'en') {
+    return queryLanguage
+  }
+
+  const pathLanguage = url.pathname.split('/').filter(Boolean)[0]
+  if (pathLanguage === 'pt' || pathLanguage === 'en') {
+    return pathLanguage
+  }
+
+  return null
+}
+
+function getInitialLanguage(): Language {
+  if (typeof window === 'undefined') {
+    return 'pt'
+  }
+
+  const languageFromUrl = getLanguageFromUrl(new URL(window.location.href))
+  if (languageFromUrl) {
+    return languageFromUrl
+  }
+
+  return window.navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en'
+}
+
+function buildLanguageUrl(language: Language) {
+  const url = new URL(window.location.href)
+  url.searchParams.set('lang', language)
+  return `${url.pathname}${url.search}${url.hash}`
+}
 
 const themes: Record<Theme, CSSProperties> = {
   dark: {
@@ -140,10 +174,12 @@ function getInitialThemeMode(): ThemeMode {
 }
 
 function App() {
+  const [language, setLanguage] = useState<Language>(getInitialLanguage)
   const [themeMode, setThemeMode] = useState<ThemeMode>(getInitialThemeMode)
   const [systemTheme, setSystemTheme] = useState<Theme>(getSystemTheme)
 
   const theme = themeMode === 'system' ? systemTheme : themeMode
+  const content = useMemo(() => siteContent[language], [language])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -170,6 +206,31 @@ function App() {
     document.documentElement.style.colorScheme = theme
   }, [theme])
 
+  useEffect(() => {
+    const syncLanguageFromUrl = () => {
+      const nextLanguage = getLanguageFromUrl(new URL(window.location.href))
+      if (nextLanguage) {
+        setLanguage(nextLanguage)
+      }
+    }
+
+    window.addEventListener('popstate', syncLanguageFromUrl)
+
+    return () => window.removeEventListener('popstate', syncLanguageFromUrl)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.lang = language === 'pt' ? 'pt-BR' : 'en'
+    document.title = content.meta.title
+
+    const nextUrl = buildLanguageUrl(language)
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`
+
+    if (currentUrl !== nextUrl) {
+      window.history.replaceState({}, '', nextUrl)
+    }
+  }, [content.meta.title, language])
+
   const themeStyle = useMemo(() => themes[theme], [theme])
 
   function handleThemeChange(nextThemeMode: ThemeMode) {
@@ -190,6 +251,15 @@ function App() {
     setThemeMode(nextThemeMode)
   }
 
+  function handleLanguageChange(nextLanguage: Language) {
+    if (nextLanguage === language) {
+      return
+    }
+
+    setLanguage(nextLanguage)
+    window.history.pushState({}, '', buildLanguageUrl(nextLanguage))
+  }
+
   return (
     <div
       className="min-h-screen overflow-hidden bg-[var(--page-bg)] text-[color:var(--text-soft)] [font-family:Outfit,Segoe_UI,sans-serif] transition-colors duration-300"
@@ -204,21 +274,24 @@ function App() {
 
       <div className="relative z-10 mx-auto max-w-[1280px] px-4 py-6 pb-28 sm:px-5 lg:px-8 lg:py-8 lg:pl-28 lg:pb-8">
         <SiteHeader
+          content={content}
           effectiveTheme={theme}
+          language={language}
+          onSelectLanguage={handleLanguageChange}
           themeMode={themeMode}
           onSelectTheme={handleThemeChange}
         />
 
         <main>
-          <HeroSection />
-          <AboutSection />
-          <ProjectsSection />
-          <RecommendationsSection />
-          <ServicesSection />
-          <ContactSection />
+          <HeroSection content={content} language={language} />
+          <AboutSection content={content.about} />
+          <ProjectsSection content={content.servicesSection} />
+          <RecommendationsSection content={content.recommendationsSection} />
+          <ServicesSection content={content.projectsSection} />
+          <ContactSection content={content.contact} />
         </main>
 
-        <SiteFooter />
+        <SiteFooter content={content.footer} />
       </div>
     </div>
   )

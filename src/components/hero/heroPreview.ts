@@ -1,3 +1,5 @@
+import type { Language, SiteContent } from '../../content'
+
 export const githubUsername = 'danilodg'
 
 export const weatherConfig = {
@@ -35,22 +37,26 @@ export type MarketAsset = {
   change24h: number
 }
 
-export const fallbackWeather: WeatherData = {
-  labels: ['Qua', 'Qui', 'Sex', 'Sab', 'Dom', 'Seg', 'Ter'],
-  temperatures: [29.2, 30.1, 29.6, 29.5, 29.2, 29.3, 26.5],
+export function getFallbackWeather(language: Language): WeatherData {
+  return {
+    labels: language === 'pt' ? ['Qua', 'Qui', 'Sex', 'Sab', 'Dom', 'Seg', 'Ter'] : ['Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue'],
+    temperatures: [29.2, 30.1, 29.6, 29.5, 29.2, 29.3, 26.5],
+  }
 }
 
-export const fallbackGitHub: GitHubData = {
-  name: 'Danilo Gomes',
-  login: githubUsername,
-  publicRepos: 9,
-  followers: 5,
-  following: 4,
-  recentRepos: [
-    { name: 'new_portfolio', language: 'TypeScript', updatedAt: 'agora' },
-    { name: 'landing-pages-templates', language: 'TypeScript', updatedAt: 'recentemente' },
-    { name: 'Forms-react-hooks', language: 'TypeScript', updatedAt: 'recentemente' },
-  ],
+export function getFallbackGitHub(previewContent: SiteContent['preview']): GitHubData {
+  return {
+    name: 'Danilo Gomes',
+    login: githubUsername,
+    publicRepos: 9,
+    followers: 5,
+    following: 4,
+    recentRepos: [
+      { name: 'new_portfolio', language: 'TypeScript', updatedAt: previewContent.githubFallback.now },
+      { name: 'landing-pages-templates', language: 'TypeScript', updatedAt: previewContent.githubFallback.recently },
+      { name: 'Forms-react-hooks', language: 'TypeScript', updatedAt: previewContent.githubFallback.recently },
+    ],
+  }
 }
 
 export const fallbackMarket: MarketAsset[] = [
@@ -98,8 +104,8 @@ export function buildAreaPath(values: number[], width: number, height: number, p
   return `${linePath} L${endX.toFixed(2)} ${baseY.toFixed(2)} L${startX.toFixed(2)} ${baseY.toFixed(2)} Z`
 }
 
-export function formatCurrency(value: number) {
-  return new Intl.NumberFormat('pt-BR', {
+export function formatCurrency(value: number, language: Language) {
+  return new Intl.NumberFormat(language === 'pt' ? 'pt-BR' : 'en-US', {
     style: 'currency',
     currency: 'BRL',
     maximumFractionDigits: 0,
@@ -111,14 +117,14 @@ export function formatPercent(value: number) {
   return `${signal}${value.toFixed(2)}%`
 }
 
-export function formatShortDate(value: string) {
+export function formatShortDate(value: string, language: Language, previewContent: SiteContent['preview']) {
   const date = new Date(value)
 
   if (Number.isNaN(date.getTime())) {
-    return 'agora'
+    return previewContent.githubFallback.now
   }
 
-  return new Intl.DateTimeFormat('pt-BR', {
+  return new Intl.DateTimeFormat(language === 'pt' ? 'pt-BR' : 'en-US', {
     day: '2-digit',
     month: '2-digit',
   }).format(date)
