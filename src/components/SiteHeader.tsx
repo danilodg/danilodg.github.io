@@ -42,12 +42,14 @@ function LanguageSelect({ content, language, onSelectLanguage, compact = false }
     <div
       className={[
         'inline-flex items-center gap-2 rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px]',
-        compact ? 'h-11 px-2.5' : 'h-14 px-3',
+        compact ? 'h-11 px-1.5' : 'h-14 px-3',
       ].join(' ')}
     >
-      <span className={compact ? 'pl-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-[color:var(--text-muted)]' : 'pl-1 text-[0.68rem] font-medium uppercase tracking-[0.16em] text-[color:var(--text-muted)]'}>
-        {content.languageLabel}
-      </span>
+      {compact ? null : (
+        <span className="pl-1 text-[0.68rem] font-medium uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
+          {content.languageLabel}
+        </span>
+      )}
 
       <div className="flex items-center rounded-[16px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] p-1">
         {(['pt', 'en'] as const).map((option) => {
@@ -66,7 +68,7 @@ function LanguageSelect({ content, language, onSelectLanguage, compact = false }
               onClick={() => onSelectLanguage(option)}
               type="button"
             >
-              {content.languageOptions[option]}
+              {compact ? option.toUpperCase() : content.languageOptions[option]}
             </button>
           )
         })}
@@ -410,27 +412,27 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       </header>
 
       <header className="lg:hidden">
-        <div className="mb-8 flex items-center justify-between gap-4 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px] [view-transition-name:none]">
-          <a className="inline-flex items-center gap-3 text-[color:var(--text-main)] no-underline" href="#inicio">
-            <span className="h-10 w-10 rounded-[14px] bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] shadow-[0_0_22px_var(--accent-shadow)]" />
-            <span>
+        <div className="mb-8 flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px] [view-transition-name:none]">
+          <a className="inline-flex min-w-0 flex-1 items-center gap-3 text-[color:var(--text-main)] no-underline" href="#inicio">
+            <span className="h-10 w-10 shrink-0 rounded-[14px] bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] shadow-[0_0_22px_var(--accent-shadow)]" />
+            <span className="min-w-0 pr-1">
               <strong className="block text-sm font-semibold">Danilo Gomes</strong>
-              <span className="block text-[0.68rem] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
+              <span className="block truncate text-[0.68rem] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
                 {content.hero.role}
               </span>
             </span>
           </a>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <LanguageSelect compact content={content} language={language} onSelectLanguage={onSelectLanguage} />
 
             <button
-              className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--nav-border)] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] px-4 text-white shadow-[0_0_22px_var(--accent-shadow)]"
+              aria-label={content.themeLabels[themeMode]}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[color:var(--nav-border)] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_22px_var(--accent-shadow)]"
               onClick={() => onSelectTheme(nextThemeMode)}
               type="button"
             >
-              <span className="mr-2"><ThemeIcon effectiveTheme={effectiveTheme} themeMode={themeMode} /></span>
-              <span className="text-xs font-medium uppercase tracking-[0.14em]">{content.themeLabels[themeMode]}</span>
+              <ThemeIcon effectiveTheme={effectiveTheme} themeMode={themeMode} />
             </button>
           </div>
         </div>

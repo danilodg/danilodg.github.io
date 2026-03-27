@@ -130,19 +130,21 @@ export function HeroSection({ content, language }: HeroSectionProps) {
     <section className="relative" id="inicio">
       <div className={`${glassPanel} relative z-10 p-6 sm:p-8 lg:p-12`}>
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-center">
-          <div className="relative z-10">
-            <span className={labelClass}>{content.hero.label}</span>
-            <h1 className="mt-6 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(2.9rem,10vw,5.6rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[color:var(--text-main)]">
+          <div className="relative z-10 max-sm:text-center">
+            <div className="max-sm:text-left">
+              <span className={labelClass}>{content.hero.label}</span>
+            </div>
+            <h1 className="mt-6 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(2.35rem,11vw,5.6rem)] font-bold leading-[0.98] tracking-[-0.02em] text-[color:var(--text-main)] sm:tracking-[-0.03em]">
               Danilo Gomes
             </h1>
-            <p className="mt-3 text-[clamp(1.45rem,2vw,2.3rem)] text-[color:var(--text-main)]">
+            <p className="mt-3 text-[clamp(1.18rem,5vw,2.3rem)] text-[color:var(--text-main)]">
               {content.hero.role}
             </p>
-            <p className="mt-5 max-w-[38rem] text-base text-[color:var(--text-soft)] sm:text-[1.06rem]">
+            <p className="mt-5 max-w-[38rem] text-base text-[color:var(--text-soft)] max-sm:mx-auto sm:text-[1.06rem]">
               {content.hero.description}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3.5">
+            <div className="mt-8 flex flex-wrap gap-3.5 max-sm:justify-center">
               <a className={primaryButtonClass} href="#projetos">
                 {content.hero.primaryCta}
               </a>
@@ -151,7 +153,7 @@ export function HeroSection({ content, language }: HeroSectionProps) {
               </a>
             </div>
 
-            <ul className="mt-10 flex max-w-[760px] flex-wrap gap-3" aria-label={content.hero.technologiesAriaLabel}>
+            <ul className="mt-10 flex max-w-[760px] flex-wrap gap-3 max-sm:justify-center" aria-label={content.hero.technologiesAriaLabel}>
               {technologies.map((technology) => (
                 <li
                   key={technology}
