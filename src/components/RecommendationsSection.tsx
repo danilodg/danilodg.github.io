@@ -4,7 +4,7 @@ import { glassPanel, labelClass, sectionTitleClass } from './ui'
 export function RecommendationsSection({ content }: { content: SiteContent['recommendationsSection'] }) {
   return (
     <section className="mt-20 lg:mt-28" id="recomendacoes">
-      <div className="mb-7 max-w-[760px]">
+      <div className="mb-7 max-w-[880px]">
         <span className={labelClass}>{content.label}</span>
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>

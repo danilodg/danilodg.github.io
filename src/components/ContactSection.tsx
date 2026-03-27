@@ -74,7 +74,7 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
 
   return (
     <section className="mt-20 lg:mt-28" id="contato">
-      <div className="mb-7 max-w-[740px]">
+      <div className="mb-7 max-w-[860px]">
         <span className={labelClass}>{content.label}</span>
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>

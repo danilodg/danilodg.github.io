@@ -4,7 +4,7 @@ import { glassPanel, labelClass, sectionTitleClass } from './ui'
 export function ProjectsSection({ content }: { content: SiteContent['servicesSection'] }) {
   return (
     <section className="mt-20 lg:mt-28" id="projetos">
-      <div className="mb-7 max-w-[740px]">
+      <div className="mb-7 max-w-[860px]">
         <span className={labelClass}>{content.label}</span>
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>

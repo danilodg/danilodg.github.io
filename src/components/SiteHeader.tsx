@@ -51,7 +51,12 @@ function LanguageSelect({ content, language, onSelectLanguage, compact = false }
         </span>
       )}
 
-      <div className="flex items-center rounded-[16px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] p-1">
+      <div className="relative grid grid-cols-2 items-center rounded-[16px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] p-1">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-1 top-1 w-[calc(50%-0.125rem)] rounded-[12px] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] shadow-[0_0_18px_var(--accent-shadow)] transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(${language === 'pt' ? '0%' : '100%'})` }}
+        />
         {(['pt', 'en'] as const).map((option) => {
           const active = language === option
 
@@ -59,9 +64,9 @@ function LanguageSelect({ content, language, onSelectLanguage, compact = false }
             <button
               aria-pressed={active}
               className={[
-                'inline-flex min-w-11 items-center justify-center rounded-[12px] px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.16em] transition',
+                'relative z-10 inline-flex h-8 min-w-11 items-center justify-center rounded-[12px] px-3 text-[0.68rem] font-semibold uppercase tracking-[0.16em] transition',
                 active
-                  ? 'bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_18px_var(--accent-shadow)]'
+                  ? 'text-white'
                   : 'text-[color:var(--text-soft)] hover:text-[color:var(--text-main)]',
               ].join(' ')}
               key={option}
