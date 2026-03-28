@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import type { SiteContent } from '../content'
 import {
@@ -10,6 +10,19 @@ import {
 
 export function ServicesSection({ content }: { content: SiteContent['projectsSection'] }) {
   const [selectedProject, setSelectedProject] = useState<SiteContent['projectsSection']['items'][number] | null>(null)
+
+  useEffect(() => {
+    if (!selectedProject) {
+      return
+    }
+
+    const { overflow } = document.body.style
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = overflow
+    }
+  }, [selectedProject])
 
   return (
     <section className="mt-20 lg:mt-28" id="servicos">
@@ -34,7 +47,7 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                 src={project.image}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[rgba(3,8,20,0.75)] via-transparent to-transparent" />
-              <span className="absolute left-5 top-5 rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                <span className="absolute left-5 top-5 rounded-full border border-white/20 bg-[rgba(8,14,30,0.62)] px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white">
                 {project.type}
               </span>
             </div>
@@ -68,12 +81,12 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
       {selectedProject ? (
         <div
           aria-modal="true"
-          className="fixed inset-0 z-40 flex items-center justify-center bg-[rgba(4,10,24,0.72)] px-4 py-8 backdrop-blur-md"
+          className="fixed inset-0 z-40 flex items-center justify-center bg-[var(--modal-overlay)] px-4 py-8"
           onClick={() => setSelectedProject(null)}
           role="dialog"
         >
           <div
-            className={`${glassPanel} max-h-[90vh] w-full max-w-3xl overflow-hidden`}
+            className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[28px] border border-[color:var(--panel-border)] bg-[var(--modal-bg)] shadow-[var(--panel-shadow)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
@@ -83,8 +96,8 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                   className="h-full w-full object-cover"
                   src={selectedProject.image}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(5,9,22,0.86)] via-transparent to-transparent" />
-                <span className="absolute bottom-5 left-5 rounded-full border border-white/20 bg-black/20 px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white backdrop-blur-sm">
+                <div className="absolute inset-0 bg-[image:var(--modal-image-overlay)]" />
+                <span className="absolute bottom-5 left-5 rounded-full border border-white/20 bg-[var(--modal-tag-bg)] px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white">
                   {selectedProject.type}
                 </span>
               </div>

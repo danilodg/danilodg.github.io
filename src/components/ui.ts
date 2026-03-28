@@ -1,5 +1,5 @@
 export const glassPanel =
-  'rounded-[28px] border border-[color:var(--panel-border)] bg-[var(--panel-bg)] shadow-[var(--panel-shadow)] backdrop-blur-[22px]'
+  'rounded-[28px] border border-[color:var(--panel-border)] bg-[var(--panel-bg)] shadow-[var(--panel-shadow)]'
 
 export const labelClass =
   'inline-flex items-center gap-2 text-[0.78rem] uppercase tracking-[0.16em] text-[color:var(--accent-soft)] before:h-px before:w-6 before:bg-gradient-to-r before:from-[color:var(--accent-line)] before:to-transparent before:content-[""]'

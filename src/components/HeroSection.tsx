@@ -25,6 +25,7 @@ import {
 type HeroSectionProps = {
   content: SiteContent
   language: Language
+  reducedEffects?: boolean
 }
 
 const fallbackMarket: MarketAsset[] = [
@@ -33,7 +34,7 @@ const fallbackMarket: MarketAsset[] = [
   { id: 'solana', symbol: 'SOL', name: 'Solana', currentPrice: 480.41, change24h: 1.4 },
 ]
 
-export function HeroSection({ content, language }: HeroSectionProps) {
+export function HeroSection({ content, language, reducedEffects = false }: HeroSectionProps) {
   const [weather, setWeather] = useState<WeatherData>(() => getFallbackWeather(language))
   const [github, setGitHub] = useState<GitHubData>(() => getFallbackGitHub(content.preview))
   const [market, setMarket] = useState<MarketAsset[]>(fallbackMarket)
@@ -165,17 +166,27 @@ export function HeroSection({ content, language }: HeroSectionProps) {
             </ul>
           </div>
 
-          <div className="relative hidden min-h-[640px] overflow-visible lg:block">
-            <div className="absolute -left-10 top-[3.75rem] z-20 w-[60%] opacity-95 hover:z-50">
-              <AnalyticsPreview content={content.preview} weather={weather} />
-            </div>
-            <div className="absolute -right-0 -top-0 z-30 w-[70%] hover:z-50">
+          {reducedEffects ? (
+            <div className="hidden gap-4 lg:grid lg:grid-cols-2 lg:items-start">
               <CodePreview content={content.preview} github={github} />
+              <AnalyticsPreview content={content.preview} weather={weather} />
+              <div className="lg:col-span-2">
+                <RevenuePreview content={content.preview} language={language} market={market} />
+              </div>
             </div>
-            <div className="absolute left-[10%] top-55 z-40 w-[70%] hover:z-50">
-              <RevenuePreview content={content.preview} language={language} market={market} />
+          ) : (
+            <div className="relative hidden min-h-[640px] overflow-visible lg:block">
+              <div className="absolute -left-10 top-[3.75rem] z-20 w-[60%] opacity-95 hover:z-50">
+                <AnalyticsPreview content={content.preview} weather={weather} />
+              </div>
+              <div className="absolute -right-0 -top-0 z-30 w-[70%] hover:z-50">
+                <CodePreview content={content.preview} github={github} />
+              </div>
+              <div className="absolute left-[10%] top-55 z-40 w-[70%] hover:z-50">
+                <RevenuePreview content={content.preview} language={language} market={market} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

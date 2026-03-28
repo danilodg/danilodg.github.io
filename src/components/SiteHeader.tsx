@@ -39,9 +39,9 @@ function ThemeIcon({ effectiveTheme, themeMode }: Pick<SiteHeaderProps, 'effecti
 
 function LanguageSelect({ content, language, onSelectLanguage, compact = false }: Pick<SiteHeaderProps, 'content' | 'language' | 'onSelectLanguage'> & { compact?: boolean }) {
   return (
-    <div
-      className={[
-        'inline-flex items-center gap-2 rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px]',
+      <div
+        className={[
+          'inline-flex items-center gap-2 rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_18px_46px_rgba(0,0,0,0.16)]',
         compact ? 'h-11 px-1.5' : 'h-14 px-3',
       ].join(' ')}
     >
@@ -106,7 +106,7 @@ function DesktopRailButton({ href, icon, label, onClick, isActive = false, expan
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={[
-        'group relative flex h-14 items-center overflow-hidden rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_14px_40px_rgba(0,0,0,0.16)] backdrop-blur-[22px] transition-[width,background-color,color] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-line)]/55',
+        'group relative flex h-14 items-center overflow-hidden rounded-[20px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_14px_40px_rgba(0,0,0,0.16)] transition-[width,background-color,color] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-line)]/55',
         expanded ? 'w-44' : 'w-14',
         isActive
           ? 'bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] text-white shadow-[0_0_28px_var(--accent-shadow)]'
@@ -203,74 +203,84 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
   }
 
   useEffect(() => {
-    let frameId: number | null = null
     const sectionIds = links.map((item) => item.id)
 
-    const updateActiveSection = () => {
-      const viewportLine = window.innerHeight * 0.45
+    const sections = sectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter((section): section is HTMLElement => Boolean(section))
+
+    if (sections.length === 0) {
+      setActiveSection(null)
+      return
+    }
+
+    const visibility = new Map<string, number>()
+
+    const syncActiveSection = () => {
+      const scrollY = window.scrollY
+
+      if (scrollY < 120) {
+        setActiveSection(null)
+        return
+      }
+
       let nextSection: string | null = null
-      let closestDistance = Number.POSITIVE_INFINITY
-      let firstSectionTop = Number.POSITIVE_INFINITY
+      let nextRatio = 0
 
       for (const sectionId of sectionIds) {
-        const section = document.getElementById(sectionId)
-        if (!section) {
-          continue
-        }
-
-        const rect = section.getBoundingClientRect()
-        firstSectionTop = Math.min(firstSectionTop, rect.top)
-
-        const distance = rect.top <= viewportLine && rect.bottom >= viewportLine
-          ? 0
-          : Math.min(Math.abs(rect.top - viewportLine), Math.abs(rect.bottom - viewportLine))
-
-        if (distance < closestDistance) {
-          closestDistance = distance
+        const ratio = visibility.get(sectionId) ?? 0
+        if (ratio > nextRatio) {
+          nextRatio = ratio
           nextSection = sectionId
-        }
-
-        if (pendingSection === sectionId && distance <= 24) {
-          if (pendingSectionTimeoutRef.current !== null) {
-            window.clearTimeout(pendingSectionTimeoutRef.current)
-            pendingSectionTimeoutRef.current = null
-          }
-
-          setPendingSection(null)
         }
       }
 
-      if (firstSectionTop > viewportLine) {
-        setActiveSection(null)
-        return
+      if (!nextSection) {
+        const viewportLine = window.innerHeight * 0.45
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect()
+          if (rect.top <= viewportLine && rect.bottom >= viewportLine) {
+            nextSection = section.id
+            break
+          }
+        }
       }
 
       setActiveSection(nextSection)
     }
 
-    const requestSectionUpdate = () => {
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId)
-      }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
 
-      frameId = window.requestAnimationFrame(() => {
-        frameId = null
-        updateActiveSection()
-      })
-    }
+          if (pendingSection === entry.target.id && entry.isIntersecting && entry.intersectionRatio > 0.35) {
+            if (pendingSectionTimeoutRef.current !== null) {
+              window.clearTimeout(pendingSectionTimeoutRef.current)
+              pendingSectionTimeoutRef.current = null
+            }
 
-    updateActiveSection()
+            setPendingSection(null)
+          }
+        })
 
-    window.addEventListener('scroll', requestSectionUpdate, { passive: true })
-    window.addEventListener('resize', requestSectionUpdate)
+        syncActiveSection()
+      },
+      {
+        rootMargin: '-18% 0px -42% 0px',
+        threshold: [0, 0.2, 0.35, 0.5, 0.7, 1],
+      },
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    window.addEventListener('resize', syncActiveSection)
+    window.addEventListener('scroll', syncActiveSection, { passive: true })
+    syncActiveSection()
 
     return () => {
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId)
-      }
-
-      window.removeEventListener('scroll', requestSectionUpdate)
-      window.removeEventListener('resize', requestSectionUpdate)
+      observer.disconnect()
+      window.removeEventListener('resize', syncActiveSection)
+      window.removeEventListener('scroll', syncActiveSection)
     }
   }, [links, pendingSection])
 
@@ -360,7 +370,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       <header className="hidden lg:block">
         <div className="fixed left-6 top-6 z-30 flex h-[calc(100vh-3rem)] flex-col justify-between py-2 [view-transition-name:none]">
           <a
-            className="flex h-16 w-72 items-center overflow-hidden rounded-[24px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_20px_48px_rgba(0,0,0,0.18)] backdrop-blur-[22px]"
+            className="flex h-16 w-72 items-center overflow-hidden rounded-[24px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] text-[color:var(--text-main)] shadow-[0_20px_48px_rgba(0,0,0,0.18)]"
             href="#inicio"
           >
             <span className="flex h-16 w-16 shrink-0 items-center justify-center">
@@ -417,7 +427,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       </header>
 
       <header className="lg:hidden">
-        <div className="mb-8 flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] backdrop-blur-[22px] [view-transition-name:none]">
+        <div className="mb-8 flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] [view-transition-name:none]">
           <a className="inline-flex min-w-0 flex-1 items-center gap-3 text-[color:var(--text-main)] no-underline" href="#inicio">
             <span className="h-10 w-10 shrink-0 rounded-[14px] bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] shadow-[0_0_22px_var(--accent-shadow)]" />
             <span className="min-w-0 pr-1">
@@ -442,7 +452,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
           </div>
         </div>
 
-        <nav ref={mobileNavRef} className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-[22px] max-[420px]:gap-1.5 max-[420px]:p-1.5 max-[360px]:gap-1 [view-transition-name:none]" aria-label="Navegacao principal mobile">
+        <nav ref={mobileNavRef} className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] max-[420px]:gap-1.5 max-[420px]:p-1.5 max-[360px]:gap-1 [view-transition-name:none]" aria-label="Navegacao principal mobile">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute left-0 bottom-2 top-2 rounded-[18px] bg-[linear-gradient(135deg,var(--accent-start),var(--accent-mid)_55%,var(--accent-end))] shadow-[0_0_22px_var(--accent-shadow)] transition-[transform,width,opacity] duration-300 ease-out max-[420px]:bottom-1.5 max-[420px]:top-1.5"

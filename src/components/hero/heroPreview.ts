@@ -66,7 +66,7 @@ export const fallbackMarket: MarketAsset[] = [
 ]
 
 export const previewPanelClass =
-  'group relative isolate overflow-hidden rounded-[30px] border border-[color:var(--preview-panel-border)] bg-[var(--preview-panel-bg)] shadow-[var(--preview-panel-shadow)] backdrop-blur-[24px] transition duration-300 hover:-translate-y-2 hover:scale-[1.01] hover:border-[color:var(--preview-panel-hover-border)] hover:shadow-[var(--preview-panel-hover-shadow)]'
+  'group relative isolate overflow-hidden rounded-[30px] border border-[color:var(--preview-panel-border)] bg-[var(--preview-panel-bg)] shadow-[var(--preview-panel-shadow)] transition duration-300 hover:-translate-y-1 hover:border-[color:var(--preview-panel-hover-border)] hover:shadow-[var(--preview-panel-hover-shadow)]'
 
 export const previewInnerPanelClass =
   'mt-4 rounded-[24px] border border-[color:var(--preview-inner-border)] bg-[var(--preview-inner-bg)] p-4'
