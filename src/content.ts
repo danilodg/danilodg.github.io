@@ -164,7 +164,7 @@ export const siteContent: Record<Language, SiteContent> = {
       en: 'EN',
     },
     nav: {
-      about: 'Sobre',
+      about: 'Home',
       services: 'Servicos',
       recommendations: 'Reviews',
       projects: 'Projetos',
@@ -365,7 +365,7 @@ export const siteContent: Record<Language, SiteContent> = {
       en: 'EN',
     },
     nav: {
-      about: 'About',
+      about: 'Home',
       services: 'Services',
       recommendations: 'Reviews',
       projects: 'Projects',

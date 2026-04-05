@@ -179,7 +179,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
   }, [])
 
   const links: NavItem[] = useMemo(() => [
-    { id: 'sobre', href: '#sobre', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.about },
+    { id: 'inicio', href: '#inicio', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.about },
     { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.services },
     { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.recommendations },
     { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.projects },
@@ -220,7 +220,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       const scrollY = window.scrollY
 
       if (scrollY < 120) {
-        setActiveSection(null)
+        setActiveSection('inicio')
         return
       }
 
