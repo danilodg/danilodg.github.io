@@ -9,9 +9,10 @@ import { useLocale } from '../locale-context'
 
 interface LandingPageProps {
   onOpenDocs: () => void
+  onOpenPortfolio: () => void
 }
 
-export function LandingPage({ onOpenDocs }: LandingPageProps) {
+export function LandingPage({ onOpenDocs, onOpenPortfolio }: LandingPageProps) {
   const { language } = useLocale()
   const content = createLandingContent(language)
 
@@ -24,7 +25,7 @@ export function LandingPage({ onOpenDocs }: LandingPageProps) {
       <PillarsSection pillars={content.pillars} />
       <PrimitivesShowcase />
       <AuthShowcase />
-      <CtaSection onOpenDocs={onOpenDocs} />
+      <CtaSection onOpenDocs={onOpenDocs} onOpenPortfolio={onOpenPortfolio} />
     </div>
   )
 }

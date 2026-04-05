@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Languages, MoonStar, Settings2, Sun, User2 } from 'lucide-react'
 
 import { createComponentDocs } from './data/component-docs'
@@ -120,6 +120,10 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const navigateToPortfolio = useCallback(() => {
+    window.location.assign(`/?lang=${language}`)
+  }, [language])
+
   const selectedDocPage = route.docPageId
     ? docsPages.find((docPage) => docPage.id === route.docPageId) ?? null
     : null
@@ -131,8 +135,8 @@ function App() {
   const selectedComponentGroup = route.componentId === 'inputs' ? 'inputs' : null
 
   const sideRailItems = useMemo(
-    () => createSideRailItems(language, route.page, route.docPageId, route.componentId, docsPages, componentDocs, navigateToHash),
-    [componentDocs, docsPages, language, route.componentId, route.docPageId, route.page],
+    () => createSideRailItems(language, route.page, route.docPageId, route.componentId, docsPages, componentDocs, navigateToHash, navigateToPortfolio),
+    [componentDocs, docsPages, language, navigateToPortfolio, route.componentId, route.docPageId, route.page],
   )
 
   return (
@@ -259,6 +263,17 @@ function App() {
                       >
                         {language === 'pt' ? 'Abrir perfil' : 'Open profile'}
                       </button>
+
+                      <button
+                        className="inline-flex w-full items-center justify-center rounded-[8px] border border-[color:var(--card-border)] bg-[color:var(--surface-soft)] px-2 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.1em] text-[color:var(--text-soft)] transition hover:bg-[color:var(--surface-hover-strong)] hover:text-[color:var(--text-main)]"
+                        onClick={() => {
+                          navigateToPortfolio()
+                          setAccountMenuOpen(false)
+                        }}
+                        type="button"
+                      >
+                        {language === 'pt' ? 'Abrir portfolio' : 'Open portfolio'}
+                      </button>
                     </div>
                   </div>
                 ) : null}
@@ -270,7 +285,7 @@ function App() {
           <div className="mx-auto w-full max-w-[1000px] p-2">
             <div className="flex min-h-[calc(100vh-2rem)] flex-col">
               {route.page === 'landing' ? (
-                <LandingPage onOpenDocs={() => navigateToHash('#docs')} />
+                <LandingPage onOpenDocs={() => navigateToHash('#docs')} onOpenPortfolio={navigateToPortfolio} />
               ) : (
                 <DocsPage
                   docs={componentDocs}

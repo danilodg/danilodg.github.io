@@ -1,4 +1,4 @@
-import { FileText, Home, ListFilter } from 'lucide-react'
+import { FileText, Home, ListFilter, User2 } from 'lucide-react'
 
 import type { Language } from '../i18n'
 import { localeStrings } from '../i18n'
@@ -15,6 +15,7 @@ export function createSideRailItems(
   docPages: DocPage[],
   docs: ComponentDoc[],
   navigate: (href: string) => void,
+  navigateToPortfolio: () => void,
 ): SideRailItem[] {
   const strings = localeStrings[language]
   const isPt = language === 'pt'
@@ -65,6 +66,16 @@ export function createSideRailItems(
       icon: <Home className="h-5 w-5" strokeWidth={1.8} />,
       isActive: page === 'landing',
       onClick: () => navigate('#landing'),
+    },
+    {
+      id: 'creator-portfolio',
+      title: isPt ? 'Portfolio do criador' : 'Creator portfolio',
+      description: isPt ? 'Abrir portfolio principal' : 'Open main portfolio',
+      href: `/?lang=${language}`,
+      urlText: '/',
+      icon: <User2 className="h-5 w-5" strokeWidth={1.8} />,
+      isActive: false,
+      onClick: navigateToPortfolio,
     },
     {
       id: 'docs',
