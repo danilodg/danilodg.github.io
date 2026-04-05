@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button, GlassPanel, SectionLabel } from 'auralith-ui'
 
 import type { Language, SiteContent } from '../content'
 import { technologies } from '../content'
@@ -15,12 +16,6 @@ import {
   type WeatherData,
   weatherConfig,
 } from './hero/heroPreview'
-import {
-  glassPanel,
-  labelClass,
-  primaryButtonClass,
-  secondaryButtonClass,
-} from './ui'
 
 type HeroSectionProps = {
   content: SiteContent
@@ -127,34 +122,41 @@ export function HeroSection({ content, language, reducedEffects = false }: HeroS
     return () => abortController.abort()
   }, [content.preview, language])
 
+  function jumpTo(sectionId: string) {
+    const section = document.getElementById(sectionId)
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   return (
     <section className="relative" id="inicio">
-      <div className={`${glassPanel} relative z-10 p-6 sm:p-8 lg:p-12`}>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-center">
+      <GlassPanel className="relative z-10 p-4 sm:p-5 lg:p-6">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-center">
           <div className="relative z-10 max-sm:text-center">
             <div className="max-sm:text-left">
-              <span className={labelClass}>{content.hero.label}</span>
+              <SectionLabel>{content.hero.label}</SectionLabel>
             </div>
-            <h1 className="mt-6 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(2.35rem,11vw,5.6rem)] font-bold leading-[0.98] tracking-[-0.02em] text-[color:var(--text-main)] sm:tracking-[-0.03em]">
+            <h1 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(2rem,9vw,4.8rem)] font-bold leading-[0.98] tracking-[-0.02em] text-[color:var(--text-main)] sm:tracking-[-0.03em]">
               Danilo Gomes
             </h1>
             <p className="mt-3 text-[clamp(1.18rem,5vw,2.3rem)] text-[color:var(--text-main)]">
               {content.hero.role}
             </p>
-            <p className="mt-5 max-w-[38rem] text-base text-[color:var(--text-soft)] max-sm:mx-auto sm:text-[1.06rem]">
+            <p className="mt-4 max-w-[38rem] text-base text-[color:var(--text-soft)] max-sm:mx-auto sm:text-[1.02rem]">
               {content.hero.description}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3.5 max-sm:justify-center">
-              <a className={primaryButtonClass} href="#projetos">
+            <div className="mt-6 flex flex-wrap gap-3 max-sm:justify-center">
+              <Button onClick={() => jumpTo('projetos')} type="button">
                 {content.hero.primaryCta}
-              </a>
-              <a className={secondaryButtonClass} href="#contato">
+              </Button>
+              <Button onClick={() => jumpTo('contato')} type="button" variant="secondary">
                 {content.hero.secondaryCta}
-              </a>
+              </Button>
             </div>
 
-            <ul className="mt-10 flex max-w-[760px] flex-wrap gap-3 max-sm:justify-center" aria-label={content.hero.technologiesAriaLabel}>
+            <ul className="mt-7 flex max-w-[760px] flex-wrap gap-2.5 max-sm:justify-center" aria-label={content.hero.technologiesAriaLabel}>
               {technologies.map((technology) => (
                 <li
                   key={technology}
@@ -188,7 +190,7 @@ export function HeroSection({ content, language, reducedEffects = false }: HeroS
             </div>
           )}
         </div>
-      </div>
+      </GlassPanel>
     </section>
   )
 }

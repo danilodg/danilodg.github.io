@@ -1,5 +1,6 @@
+import { GlassPanel, SectionLabel } from 'auralith-ui'
+
 import type { SiteContent } from '../content'
-import { glassPanel, labelClass } from './ui'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
 
@@ -30,56 +31,56 @@ function MailIcon() {
 
 export function SiteFooter({ content }: { content: SiteContent['footer'] }) {
   return (
-    <footer
-      className={`${glassPanel} mt-20 grid gap-8 p-6 sm:p-7 lg:mt-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end`}
-    >
-      <div className="max-w-[34rem]">
-        <span className={labelClass}>{content.label}</span>
-        <h2 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(1.6rem,4vw,2.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-[color:var(--text-main)]">
-          {content.title}
-        </h2>
-        <p className="mt-4 text-[color:var(--text-soft)]">
-          {content.description}
-        </p>
-      </div>
-
-      <div className="grid gap-4 text-sm text-[color:var(--text-soft)] lg:justify-items-end">
-        <a
-          className="flex items-center gap-3 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-4 py-3 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
-          href={`mailto:${contactEmail}`}
-        >
-          <MailIcon />
-          <span>{contactEmail}</span>
-        </a>
-
-        <div className="flex flex-wrap gap-3 lg:justify-end">
-          <a
-            aria-label="GitHub"
-            className="flex items-center gap-3 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-4 py-3 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
-            href="https://github.com/danilodg"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <GitHubIcon />
-            <span>GitHub</span>
-          </a>
-
-          <a
-            aria-label="LinkedIn"
-            className="flex items-center gap-3 rounded-2xl border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-4 py-3 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
-            href="https://www.linkedin.com/in/danilogomesdg"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <LinkedInIcon />
-            <span>LinkedIn</span>
-          </a>
+    <footer className="mt-12 lg:mt-16">
+      <GlassPanel className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
+        <div className="max-w-[34rem]">
+          <SectionLabel>{content.label}</SectionLabel>
+          <h2 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[clamp(1.6rem,4vw,2.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-[color:var(--text-main)]">
+            {content.title}
+          </h2>
+          <p className="mt-4 text-[color:var(--text-soft)]">
+            {content.description}
+          </p>
         </div>
 
-        <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
-          {content.availability}
-        </p>
-      </div>
+        <div className="grid gap-4 text-sm text-[color:var(--text-soft)] lg:justify-items-end">
+          <a
+            className="flex items-center gap-3 rounded-[10px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2.5 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
+            href={`mailto:${contactEmail}`}
+          >
+            <MailIcon />
+            <span>{contactEmail}</span>
+          </a>
+
+          <div className="flex flex-wrap gap-3 lg:justify-end">
+            <a
+              aria-label="GitHub"
+              className="flex items-center gap-3 rounded-[10px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2.5 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
+              href="https://github.com/danilodg"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <GitHubIcon />
+              <span>GitHub</span>
+            </a>
+
+            <a
+              aria-label="LinkedIn"
+              className="flex items-center gap-3 rounded-[10px] border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2.5 text-[color:var(--text-main)] transition hover:-translate-y-0.5"
+              href="https://www.linkedin.com/in/danilogomesdg"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <LinkedInIcon />
+              <span>LinkedIn</span>
+            </a>
+          </div>
+
+          <p className="text-xs uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
+            {content.availability}
+          </p>
+        </div>
+      </GlassPanel>
     </footer>
   )
 }

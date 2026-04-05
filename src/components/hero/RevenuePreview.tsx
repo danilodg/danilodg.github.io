@@ -1,5 +1,6 @@
+import { SectionLabel } from 'auralith-ui'
+
 import type { Language, SiteContent } from '../../content'
-import { labelClass } from '../ui'
 import {
   formatCurrency,
   formatPercent,
@@ -16,7 +17,7 @@ export function RevenuePreview({ content, language, market }: { content: SiteCon
   return (
     <div className={`${previewPanelClass} p-5`}>
       <div className="flex items-center justify-between">
-        <span className={labelClass}>CoinGecko</span>
+        <SectionLabel>CoinGecko</SectionLabel>
         <span className="text-xs uppercase tracking-[0.16em] text-[color:var(--text-muted)]">{content.revenue.marketLabel}</span>
       </div>
 
@@ -25,7 +26,7 @@ export function RevenuePreview({ content, language, market }: { content: SiteCon
 
         <div className="mt-4 space-y-3">
           {market.map((asset) => (
-            <div className="flex items-center justify-between rounded-2xl border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5" key={asset.id}>
+            <div className="flex items-center justify-between rounded-[10px] border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5" key={asset.id}>
               <div>
                 <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
                   {asset.symbol}
@@ -46,7 +47,7 @@ export function RevenuePreview({ content, language, market }: { content: SiteCon
           ))}
         </div>
 
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5">
+        <div className="mt-4 flex items-center justify-between rounded-[10px] border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)] px-3 py-2.5">
           <div>
               <span className="block text-[10px] uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
                 {content.revenue.bestLabel}

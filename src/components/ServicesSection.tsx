@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Button, GlassPanel, SectionLabel, Tag } from 'auralith-ui'
 
 import type { SiteContent } from '../content'
 import {
-  glassPanel,
-  labelClass,
-  primaryButtonClass,
   sectionTitleClass,
 } from './ui'
 
@@ -24,56 +22,58 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
     }
   }, [selectedProject])
 
+  function jumpToContact() {
+    const section = document.getElementById('contato')
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    setSelectedProject(null)
+  }
+
   return (
-    <section className="mt-20 lg:mt-28" id="servicos">
+    <section className="mt-12 lg:mt-16" id="servicos">
       <div className="mb-7 max-w-[860px]">
-        <span className={labelClass}>{content.label}</span>
+        <SectionLabel>{content.label}</SectionLabel>
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         {content.items.map((project) => (
-          <button
-            className={`${glassPanel} group overflow-hidden p-0 text-left transition duration-300 hover:-translate-y-1`}
-            key={project.title}
-            onClick={() => setSelectedProject(project)}
-            type="button"
-          >
-            <div className="relative h-56 overflow-hidden">
-              <img
-                alt={project.title}
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                loading="lazy"
-                src={project.image}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[rgba(3,8,20,0.75)] via-transparent to-transparent" />
-                <span className="absolute left-5 top-5 rounded-full border border-white/20 bg-[rgba(8,14,30,0.62)] px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white">
-                {project.type}
-              </span>
-            </div>
-
-            <div className="flex h-[calc(100%-14rem)] flex-col p-6">
-              <h3 className="[font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.35rem] font-bold text-[color:var(--text-main)]">
-                {project.title}
-              </h3>
-              <p className="mt-3 text-[color:var(--text-soft)]">{project.summary}</p>
-
-              <div className="mt-5 flex flex-wrap gap-2.5">
-                {project.technologies.map((technology) => (
-                  <span
-                    className="rounded-full border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2 text-xs uppercase tracking-[0.12em] text-[color:var(--text-soft)]"
-                    key={technology}
-                  >
-                    {technology}
-                  </span>
-                ))}
+          <button className="group text-left" key={project.title} onClick={() => setSelectedProject(project)} type="button">
+            <GlassPanel className="overflow-hidden p-0 transition duration-300 hover:-translate-y-1">
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  alt={project.title}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                  loading="lazy"
+                  src={project.image}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(3,8,20,0.75)] via-transparent to-transparent" />
+                <Tag className="absolute left-5 top-5 rounded-full border-white/20 bg-[rgba(8,14,30,0.62)] px-3 py-1.5 text-xs tracking-[0.12em] text-white">
+                  {project.type}
+                </Tag>
               </div>
 
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-soft)]">
-                {content.viewMore}
-                <span aria-hidden="true">+</span>
-              </span>
-            </div>
+              <div className="flex h-[calc(100%-14rem)] flex-col p-4 sm:p-5">
+                <h3 className="[font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.35rem] font-bold text-[color:var(--text-main)]">
+                  {project.title}
+                </h3>
+                <p className="mt-3 text-[color:var(--text-soft)]">{project.summary}</p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.technologies.map((technology) => (
+                    <Tag className="rounded-full border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2 text-xs tracking-[0.12em]" key={technology}>
+                      {technology}
+                    </Tag>
+                  ))}
+                </div>
+
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-soft)]">
+                  {content.viewMore}
+                  <span aria-hidden="true">+</span>
+                </span>
+              </div>
+            </GlassPanel>
           </button>
         ))}
       </div>
@@ -86,7 +86,7 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
           role="dialog"
         >
           <div
-            className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[28px] border border-[color:var(--panel-border)] bg-[var(--modal-bg)] shadow-[var(--panel-shadow)]"
+            className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[10px] border border-[color:var(--panel-border)] bg-[var(--modal-bg)] shadow-[var(--panel-shadow)]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
@@ -97,15 +97,15 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                   src={selectedProject.image}
                 />
                 <div className="absolute inset-0 bg-[image:var(--modal-image-overlay)]" />
-                <span className="absolute bottom-5 left-5 rounded-full border border-white/20 bg-[var(--modal-tag-bg)] px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-white">
+                <Tag className="absolute bottom-5 left-5 rounded-full border-white/20 bg-[var(--modal-tag-bg)] px-3 py-1.5 text-xs tracking-[0.12em] text-white">
                   {selectedProject.type}
-                </span>
+                </Tag>
               </div>
 
-              <div className="flex max-h-[90vh] flex-col overflow-y-auto p-6 sm:p-7">
+              <div className="flex max-h-[90vh] flex-col overflow-y-auto p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <span className={labelClass}>{content.featuredLabel}</span>
+                    <SectionLabel>{content.featuredLabel}</SectionLabel>
                     <h3 className="mt-4 [font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.75rem] font-bold leading-tight text-[color:var(--text-main)]">
                       {selectedProject.title}
                     </h3>
@@ -125,12 +125,9 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
 
                 <div className="mt-6 flex flex-wrap gap-2.5">
                   {selectedProject.technologies.map((technology) => (
-                    <span
-                      className="rounded-full border border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2 text-xs uppercase tracking-[0.12em] text-[color:var(--text-soft)]"
-                      key={technology}
-                    >
+                    <Tag className="rounded-full border-[color:var(--chip-border)] bg-[var(--chip-bg)] px-3 py-2 text-xs tracking-[0.12em]" key={technology}>
                       {technology}
-                    </span>
+                    </Tag>
                   ))}
                 </div>
 
@@ -143,9 +140,9 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                   ))}
                 </div>
 
-                <a className={`${primaryButtonClass} mt-8`} href="#contato">
+                <Button className="mt-8 self-start" onClick={jumpToContact} type="button">
                   {content.cta}
-                </a>
+                </Button>
               </div>
             </div>
           </div>

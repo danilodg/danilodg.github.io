@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
+import { SectionLabel } from 'auralith-ui'
 
 import type { SiteContent } from '../../content'
-import { labelClass } from '../ui'
 import {
   buildAreaPath,
   buildLinePath,
@@ -29,7 +29,7 @@ export function AnalyticsPreview({ content, weather }: { content: SiteContent['p
   return (
     <div className={`${previewPanelClass} p-5`}>
       <div className="flex items-center justify-between">
-        <span className={labelClass}>Open-Meteo</span>
+        <SectionLabel>Open-Meteo</SectionLabel>
         <span className="text-xs uppercase tracking-[0.16em] text-[color:var(--text-muted)]">
           {weatherConfig.city}
         </span>
@@ -51,7 +51,7 @@ export function AnalyticsPreview({ content, weather }: { content: SiteContent['p
           </div>
         </div>
 
-        <div className="relative h-40 overflow-hidden rounded-[18px] border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)]">
+        <div className="relative h-40 overflow-hidden rounded-[10px] border border-[color:var(--preview-item-border)] bg-[color:var(--preview-item-bg)]">
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--preview-chart-grid)_1px,transparent_1px),linear-gradient(to_right,var(--preview-chart-grid-strong)_1px,transparent_1px)] bg-[size:100%_25%,14.28%_100%] opacity-50" />
 
           <svg

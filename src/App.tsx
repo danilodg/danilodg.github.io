@@ -343,7 +343,7 @@ function App() {
         </>
       )}
 
-      <div className="relative z-10 mx-auto max-w-[1280px] px-4 py-6 pb-28 sm:px-5 lg:px-8 lg:py-8 lg:pl-28 lg:pb-8">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-3 py-4 pb-24 sm:px-4 lg:px-6 lg:py-5 lg:pl-24 lg:pb-6">
         <SiteHeader
           content={content}
           effectiveTheme={theme}

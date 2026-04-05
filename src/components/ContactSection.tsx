@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
+import { Button, GlassPanel, Input, SectionLabel, Textarea } from 'auralith-ui'
 
 import type { SiteContent } from '../content'
-import { glassPanel, labelClass, primaryButtonClass, sectionTitleClass } from './ui'
+import { sectionTitleClass } from './ui'
 
 type FormStatus =
   | { type: 'idle'; message: string }
   | { type: 'success'; message: string }
   | { type: 'error'; message: string }
-
-const inputClass =
-  'w-full rounded-2xl border border-[color:var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-[color:var(--text-main)] outline-none transition placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--accent-line)]/60 focus:ring-2 focus:ring-cyan-300/20'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
 
@@ -73,17 +71,17 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
   }
 
   return (
-    <section className="mt-20 lg:mt-28" id="contato">
+    <section className="mt-12 lg:mt-16" id="contato">
       <div className="mb-7 max-w-[860px]">
-        <span className={labelClass}>{content.label}</span>
+        <SectionLabel>{content.label}</SectionLabel>
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div className={`${glassPanel} flex flex-col gap-5 p-7`}>
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <GlassPanel className="flex flex-col gap-3 p-4 sm:p-5">
           <p className="max-w-[34rem] text-[color:var(--text-soft)]">{content.intro}</p>
 
-          <div className="grid gap-4 text-sm text-[color:var(--text-soft)]">
+          <div className="grid gap-3 text-sm text-[color:var(--text-soft)]">
             <div>
               <span className="mb-1 block text-[color:var(--text-main)]">{content.responseTitle}</span>
               <p>{content.responseText}</p>
@@ -97,65 +95,56 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
               <p>{contactEmail || content.directChannelFallback}</p>
             </div>
           </div>
-        </div>
+        </GlassPanel>
 
-        <form className={`${glassPanel} grid gap-4 p-7`} onSubmit={handleSubmit}>
-          <input name="_subject" type="hidden" value={content.subjectValue} />
-          <input name="_captcha" type="hidden" value="false" />
-          <input name="_template" type="hidden" value="table" />
+        <GlassPanel className="p-4 sm:p-5">
+          <form className="grid gap-3" onSubmit={handleSubmit}>
+            <input name="_subject" type="hidden" value={content.subjectValue} />
+            <input name="_captcha" type="hidden" value="false" />
+            <input name="_template" type="hidden" value="table" />
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-              <span>{content.formLabels.name}</span>
-              <input className={inputClass} name="name" placeholder={content.placeholders.name} required />
-            </label>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Input.Root>
+                <Input.Label>{content.formLabels.name}</Input.Label>
+                <Input.Field name="name" placeholder={content.placeholders.name} required />
+              </Input.Root>
 
-            <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-              <span>{content.formLabels.email}</span>
-              <input
-                className={inputClass}
-                name="email"
-                placeholder={content.placeholders.email}
-                required
-                type="email"
-              />
-            </label>
-          </div>
+              <Input.Root>
+                <Input.Label>{content.formLabels.email}</Input.Label>
+                <Input.Field name="email" placeholder={content.placeholders.email} required type="email" />
+              </Input.Root>
+            </div>
 
-          <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-            <span>{content.formLabels.subject}</span>
-            <input className={inputClass} name="title" placeholder={content.placeholders.subject} required />
-          </label>
+            <Input.Root>
+              <Input.Label>{content.formLabels.subject}</Input.Label>
+              <Input.Field name="title" placeholder={content.placeholders.subject} required />
+            </Input.Root>
 
-          <label className="grid gap-2 text-sm text-[color:var(--text-main)]">
-            <span>{content.formLabels.message}</span>
-            <textarea
-              className={`${inputClass} min-h-36 resize-y`}
-              name="message"
-              placeholder={content.placeholders.message}
-              required
-            />
-          </label>
+            <Textarea.Root>
+              <Textarea.Label>{content.formLabels.message}</Textarea.Label>
+              <Textarea.Field className="resize-y" name="message" placeholder={content.placeholders.message} required />
+            </Textarea.Root>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p
-              className={[
-                'text-sm',
-                status.type === 'success'
-                  ? 'text-emerald-300'
-                  : status.type === 'error'
-                    ? 'text-rose-300'
-                  : 'text-[color:var(--text-muted)]',
-              ].join(' ')}
-            >
-              {status.message}
-            </p>
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+              <p
+                className={[
+                  'text-sm',
+                  status.type === 'success'
+                    ? 'text-emerald-300'
+                    : status.type === 'error'
+                      ? 'text-rose-300'
+                    : 'text-[color:var(--text-muted)]',
+                ].join(' ')}
+              >
+                {status.message}
+              </p>
 
-            <button className={primaryButtonClass} disabled={isSubmitting} type="submit">
-              {isSubmitting ? content.submitting : content.submit}
-            </button>
-          </div>
-        </form>
+              <Button className="min-w-[132px]" disabled={isSubmitting} type="submit">
+                {isSubmitting ? content.submitting : content.submit}
+              </Button>
+            </div>
+          </form>
+        </GlassPanel>
       </div>
     </section>
   )
