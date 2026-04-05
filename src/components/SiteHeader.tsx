@@ -210,7 +210,6 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       .filter((section): section is HTMLElement => Boolean(section))
 
     if (sections.length === 0) {
-      setActiveSection(null)
       return
     }
 

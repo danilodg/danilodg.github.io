@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, GlassPanel, SectionLabel } from 'auralith-ui'
+import { useNavigate } from 'react-router-dom'
 
 import type { Language, SiteContent } from '../content'
 import { technologies } from '../content'
@@ -30,16 +31,14 @@ const fallbackMarket: MarketAsset[] = [
 ]
 
 export function HeroSection({ content, language, reducedEffects = false }: HeroSectionProps) {
+  const navigate = useNavigate()
   const [weather, setWeather] = useState<WeatherData>(() => getFallbackWeather(language))
   const [github, setGitHub] = useState<GitHubData>(() => getFallbackGitHub(content.preview))
   const [market, setMarket] = useState<MarketAsset[]>(fallbackMarket)
 
   useEffect(() => {
     const abortController = new AbortController()
-
-    setWeather(getFallbackWeather(language))
-    setGitHub(getFallbackGitHub(content.preview))
-    setMarket(fallbackMarket)
+    const fallbackGitHub = getFallbackGitHub(content.preview)
 
     async function loadHeroData() {
       const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${weatherConfig.latitude}&longitude=${weatherConfig.longitude}&daily=temperature_2m_max&timezone=${weatherConfig.timezone}&forecast_days=7`
@@ -86,11 +85,11 @@ export function HeroSection({ content, language, reducedEffects = false }: HeroS
 
         if (profilePayload?.login && Array.isArray(reposPayload)) {
           setGitHub({
-            name: profilePayload.name || getFallbackGitHub(content.preview).name,
+            name: profilePayload.name || fallbackGitHub.name,
             login: profilePayload.login,
-            publicRepos: profilePayload.public_repos ?? getFallbackGitHub(content.preview).publicRepos,
-            followers: profilePayload.followers ?? getFallbackGitHub(content.preview).followers,
-            following: profilePayload.following ?? getFallbackGitHub(content.preview).following,
+            publicRepos: profilePayload.public_repos ?? fallbackGitHub.publicRepos,
+            followers: profilePayload.followers ?? fallbackGitHub.followers,
+            following: profilePayload.following ?? fallbackGitHub.following,
             recentRepos: reposPayload.slice(0, 3).map((repo: Record<string, unknown>) => ({
               name: String(repo.name ?? 'repo'),
               language: String(repo.language ?? content.preview.githubFallback.noLanguage),
@@ -153,6 +152,9 @@ export function HeroSection({ content, language, reducedEffects = false }: HeroS
               </Button>
               <Button onClick={() => jumpTo('contato')} type="button" variant="secondary">
                 {content.hero.secondaryCta}
+              </Button>
+              <Button onClick={() => navigate(`/auralith-ui/?lang=${language}`)} type="button" variant="secondary">
+                Auralith UI Docs
               </Button>
             </div>
 
