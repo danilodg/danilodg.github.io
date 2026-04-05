@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">Auralith UI Documentation</title>
+  <desc id="desc">Visual cover for docs experience integrated with portfolio.</desc>
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#090f20" />
+      <stop offset="50%" stop-color="#1a1a38" />
+      <stop offset="100%" stop-color="#1b284b" />
+    </linearGradient>
+    <linearGradient id="accent3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6fe0ff" />
+      <stop offset="45%" stop-color="#687eff" />
+      <stop offset="100%" stop-color="#8b66ff" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="680" fill="url(#bg3)" rx="30" />
+  <rect x="78" y="78" width="1044" height="524" rx="24" fill="rgba(8,14,31,0.8)" stroke="rgba(173,208,255,0.22)" />
+  <rect x="112" y="112" width="238" height="456" rx="16" fill="rgba(8,18,42,0.92)" stroke="rgba(173,208,255,0.2)" />
+  <rect x="136" y="146" width="190" height="38" rx="10" fill="url(#accent3)" />
+  <rect x="136" y="206" width="190" height="40" rx="10" fill="rgba(126,231,255,0.14)" stroke="rgba(126,231,255,0.36)" />
+  <rect x="136" y="258" width="190" height="40" rx="10" fill="rgba(104,126,255,0.14)" stroke="rgba(104,126,255,0.36)" />
+  <rect x="136" y="310" width="190" height="40" rx="10" fill="rgba(139,102,255,0.14)" stroke="rgba(139,102,255,0.36)" />
+  <rect x="136" y="362" width="190" height="40" rx="10" fill="rgba(126,231,255,0.08)" stroke="rgba(173,208,255,0.26)" />
+  <rect x="136" y="508" width="190" height="36" rx="10" fill="rgba(126,231,255,0.12)" stroke="rgba(126,231,255,0.35)" />
+  <rect x="380" y="112" width="708" height="456" rx="16" fill="rgba(9,19,46,0.86)" stroke="rgba(173,208,255,0.22)" />
+  <rect x="418" y="152" width="318" height="22" rx="11" fill="#edf5ff" opacity="0.94" />
+  <rect x="418" y="186" width="420" height="12" rx="6" fill="#c8dcff" opacity="0.8" />
+  <rect x="418" y="230" width="630" height="124" rx="14" fill="rgba(12,24,56,0.84)" stroke="rgba(173,208,255,0.26)" />
+  <rect x="448" y="264" width="190" height="36" rx="10" fill="url(#accent3)" />
+  <rect x="656" y="264" width="190" height="36" rx="10" fill="none" stroke="rgba(173,208,255,0.4)" />
+  <rect x="864" y="264" width="160" height="36" rx="10" fill="none" stroke="rgba(173,208,255,0.4)" />
+  <rect x="418" y="376" width="320" height="160" rx="14" fill="rgba(12,24,56,0.84)" stroke="rgba(173,208,255,0.26)" />
+  <rect x="768" y="376" width="320" height="160" rx="14" fill="rgba(12,24,56,0.84)" stroke="rgba(173,208,255,0.26)" />
+  <text x="418" y="548" fill="#c6d8fb" font-family="'IBM Plex Mono', 'Trebuchet MS', monospace" font-size="18">Docs real da biblioteca em /auralith-ui com idioma PT/EN</text>
+</svg>

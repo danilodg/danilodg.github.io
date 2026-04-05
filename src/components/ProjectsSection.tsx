@@ -28,7 +28,9 @@ export function ProjectsSection({ content }: { content: SiteContent['servicesSec
               ))}
             </div>
 
-            <div className="mt-4 h-0.5 w-full bg-gradient-to-r from-[color:var(--accent-line)] to-transparent" />
+            <div className="mt-auto pt-4">
+              <div className="h-0.5 w-full bg-gradient-to-r from-[color:var(--accent-line)] to-transparent" />
+            </div>
           </GlassPanel>
         ))}
       </div>

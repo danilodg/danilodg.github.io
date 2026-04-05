@@ -4,6 +4,10 @@ import type { SiteContent } from '../content'
 import { sectionTitleClass } from './ui'
 
 export function RecommendationsSection({ content }: { content: SiteContent['recommendationsSection'] }) {
+  if (!content.items.length) {
+    return null
+  }
+
   return (
     <section className="mt-12 lg:mt-16" id="recomendacoes">
       <div className="mb-7 max-w-[880px]">

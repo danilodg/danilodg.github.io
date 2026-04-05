@@ -30,6 +30,15 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
     setSelectedProject(null)
   }
 
+  function openProject(url: string) {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      window.open(url, '_blank', 'noopener,noreferrer')
+      return
+    }
+
+    window.location.assign(url)
+  }
+
   return (
     <section className="mt-12 lg:mt-16" id="servicos">
       <div className="mb-7 max-w-[860px]">
@@ -39,8 +48,8 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
 
       <div className="grid gap-4 lg:grid-cols-3">
         {content.items.map((project) => (
-          <button className="group text-left" key={project.title} onClick={() => setSelectedProject(project)} type="button">
-            <GlassPanel className="overflow-hidden p-0 transition duration-300 hover:-translate-y-1">
+          <button className="group h-full text-left" key={project.title} onClick={() => setSelectedProject(project)} type="button">
+            <GlassPanel className="flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1">
               <div className="relative h-56 overflow-hidden">
                 <img
                   alt={project.title}
@@ -54,11 +63,11 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                 </Tag>
               </div>
 
-              <div className="flex h-[calc(100%-14rem)] flex-col p-4 sm:p-5">
+              <div className="flex flex-1 flex-col p-4 sm:p-5">
                 <h3 className="[font-family:Space_Grotesk,Trebuchet_MS,sans-serif] text-[1.35rem] font-bold text-[color:var(--text-main)]">
                   {project.title}
                 </h3>
-                <p className="mt-3 text-[color:var(--text-soft)]">{project.summary}</p>
+                <p className="mt-3 min-h-[72px] text-[color:var(--text-soft)]">{project.summary}</p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.technologies.map((technology) => (
@@ -68,7 +77,7 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                   ))}
                 </div>
 
-                <span className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--accent-soft)]">
+                <span className="mt-auto inline-flex items-center gap-2 pt-4 text-sm font-medium text-[color:var(--accent-soft)]">
                   {content.viewMore}
                   <span aria-hidden="true">+</span>
                 </span>
@@ -140,9 +149,23 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
                   ))}
                 </div>
 
-                <Button className="mt-8 self-start" onClick={jumpToContact} type="button">
-                  {content.cta}
-                </Button>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {selectedProject.projectUrl ? (
+                    <Button onClick={() => selectedProject.projectUrl && openProject(selectedProject.projectUrl)} type="button">
+                      {selectedProject.projectLabel ?? content.openProjectLabel}
+                    </Button>
+                  ) : null}
+
+                  {selectedProject.repositoryUrl ? (
+                    <Button onClick={() => selectedProject.repositoryUrl && openProject(selectedProject.repositoryUrl)} type="button" variant="secondary">
+                      {content.openRepositoryLabel}
+                    </Button>
+                  ) : null}
+
+                  <Button onClick={jumpToContact} type="button" variant="secondary">
+                    {content.cta}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

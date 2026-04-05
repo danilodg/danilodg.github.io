@@ -1,6 +1,5 @@
-import financeAppImage from './assets/project-finance-app.svg'
-import medicalLandingImage from './assets/project-medical-landing.svg'
-import salesDashboardImage from './assets/project-sales-dashboard.svg'
+import auralithUiImage from './assets/project-auralith-ui.svg'
+import landingTemplatesImage from './assets/project-landing-templates.svg'
 
 export type Language = 'pt' | 'en'
 
@@ -70,7 +69,12 @@ export type SiteContent = {
       technologies: string[]
       details: string
       highlights: string[]
+      projectUrl?: string
+      repositoryUrl?: string
+      projectLabel?: string
     }>
+    openProjectLabel: string
+    openRepositoryLabel: string
   }
   contact: {
     label: string
@@ -218,72 +222,46 @@ export const siteContent: Record<Language, SiteContent> = {
     recommendationsSection: {
       label: 'Recomendacoes',
       title: 'Percepcao de quem ja construiu projetos e processos comigo',
-      items: [
-        {
-          name: 'Mariana Costa',
-          role: 'Product Designer',
-          company: 'Studio Norte',
-          quote: 'Danilo transforma requisitos complexos em interfaces limpas e bem resolvidas. O processo sempre fica mais claro quando ele entra no projeto.',
-        },
-        {
-          name: 'Rafael Mendes',
-          role: 'Founder',
-          company: 'LeadOps',
-          quote: 'Conseguiu unir velocidade de entrega com organizacao tecnica. O resultado final ficou mais solido do que o escopo inicial imaginava.',
-        },
-        {
-          name: 'Camila Rocha',
-          role: 'Project Manager',
-          company: 'Nova Stack',
-          quote: 'Tem um olhar muito bom para experiencia de uso e para estrutura de codigo. Isso ajuda bastante quando o produto precisa evoluir sem retrabalho.',
-        },
-      ],
+      items: [],
     },
     projectsSection: {
       label: 'Projetos',
-      title: 'Alguns projetos que ja tiramos do papel',
+      title: 'Projetos reais que ja desenvolvi',
       featuredLabel: 'Projeto em destaque',
       viewMore: 'Ver mais detalhes',
       closeModal: 'Fechar modal',
       cta: 'Quero um projeto nesse nivel',
+      openProjectLabel: 'Ver projeto',
+      openRepositoryLabel: 'Ver repositorio',
       items: [
         {
-          title: 'Landing page para medico especialista',
-          type: 'Landing page',
-          summary: 'Pagina focada em autoridade, agendamento e conversao para consultas particulares.',
-          image: medicalLandingImage,
-          technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
-          details: 'Projeto pensado para apresentar servicos medicos com uma comunicacao mais confiavel, destacar especialidades e reduzir atrito no agendamento.',
+          title: 'Auralith UI - biblioteca de componentes React',
+          type: 'Design system',
+          summary: 'Biblioteca publicada no npm com componentes, tokens visuais e documentacao integrada.',
+          image: auralithUiImage,
+          technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'npm'],
+          details: 'Criei uma biblioteca de UI reutilizavel com foco em consistencia visual, produtividade e composicao de interfaces modernas.',
+          projectUrl: '/auralith-ui/?lang=pt',
+          repositoryUrl: 'https://github.com/danilodg/auralith-ui',
+          projectLabel: 'Ver documentacao',
           highlights: [
-            'Hero com CTA direto para WhatsApp e formulario de contato',
-            'Secoes de especialidades, depoimentos e perguntas frequentes',
-            'Layout responsivo com foco em leitura clara no mobile',
+            'Pacote publicado como auralith-ui no npm',
+            'Componentes prontos como Button, Input, Card, Modal e SideRail',
+            'Base com tokens e estilos para manter consistencia entre projetos',
           ],
         },
         {
-          title: 'Dashboard de vendas e indicadores',
-          type: 'Dashboard',
-          summary: 'Painel para acompanhar receita, metas e desempenho comercial em tempo real.',
-          image: salesDashboardImage,
-          technologies: ['React', 'TypeScript', 'Chart.js', 'Node.js'],
-          details: 'Sistema desenhado para centralizar metricas de vendas, facilitar leitura por equipe comercial e apoiar decisoes rapidas com dados visuais.',
+          title: 'Landing Pages Templates',
+          type: 'Builder web',
+          summary: 'Projeto para criar landing pages com wizard em etapas, temas visuais e preview em tempo real.',
+          image: landingTemplatesImage,
+          technologies: ['React', 'TypeScript', 'Vite', 'Material UI'],
+          details: 'Desenvolvi um construtor de landing pages com configuracao guiada, variacoes de layout e personalizacao visual para acelerar entregas.',
+          repositoryUrl: 'https://github.com/danilodg/landing-pages-templates',
           highlights: [
-            'Cards de KPIs com receita, ticket medio e conversao',
-            'Graficos comparativos por periodo, canal e vendedor',
-            'Filtros para acompanhamento diario, semanal e mensal',
-          ],
-        },
-        {
-          title: 'Carteira de gestao financeira',
-          type: 'Aplicativo web',
-          summary: 'Produto para organizar contas, metas financeiras e acompanhamento de fluxo de caixa.',
-          image: financeAppImage,
-          technologies: ['React', 'TypeScript', 'Firebase', 'Tailwind CSS'],
-          details: 'Aplicacao voltada para controle financeiro pessoal, com visao de entradas e saidas, metas mensais e categorizacao de lancamentos.',
-          highlights: [
-            'Resumo de saldo, gastos por categoria e metas do mes',
-            'Cadastro de receitas e despesas com filtros rapidos',
-            'Experiencia mobile-first para acompanhar a carteira no dia a dia',
+            'Wizard com etapas de negocio, estilo, layout e conteudo',
+            'Preview dinamico da landing com secoes completas',
+            'Arquitetura pronta para evoluir novos templates',
           ],
         },
       ],
@@ -419,72 +397,46 @@ export const siteContent: Record<Language, SiteContent> = {
     recommendationsSection: {
       label: 'Recommendations',
       title: 'What people say after building projects and processes with me',
-      items: [
-        {
-          name: 'Mariana Costa',
-          role: 'Product Designer',
-          company: 'Studio Norte',
-          quote: 'Danilo turns complex requirements into clean, well-resolved interfaces. The whole process becomes clearer when he joins the project.',
-        },
-        {
-          name: 'Rafael Mendes',
-          role: 'Founder',
-          company: 'LeadOps',
-          quote: 'He combined delivery speed with technical organization. The final result was more solid than what we had originally imagined.',
-        },
-        {
-          name: 'Camila Rocha',
-          role: 'Project Manager',
-          company: 'Nova Stack',
-          quote: 'He has a strong eye for user experience and code structure. That makes a big difference when the product needs to evolve without rework.',
-        },
-      ],
+      items: [],
     },
     projectsSection: {
       label: 'Projects',
-      title: 'A few projects I have helped bring to life',
+      title: 'Real projects I have built',
       featuredLabel: 'Featured project',
       viewMore: 'View more details',
       closeModal: 'Close modal',
       cta: 'I want a project at this level',
+      openProjectLabel: 'Open project',
+      openRepositoryLabel: 'View repository',
       items: [
         {
-          title: 'Landing page for a medical specialist',
-          type: 'Landing page',
-          summary: 'A page designed for authority, appointment booking, and conversion for private consultations.',
-          image: medicalLandingImage,
-          technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
-          details: 'This project was designed to present medical services with a stronger sense of trust, highlight specialties, and reduce friction in the booking flow.',
+          title: 'Auralith UI - React component library',
+          type: 'Design system',
+          summary: 'npm-published UI library with reusable components, visual tokens, and integrated documentation.',
+          image: auralithUiImage,
+          technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'npm'],
+          details: 'I built a reusable UI library focused on visual consistency, implementation speed, and modern interface composition.',
+          projectUrl: '/auralith-ui/?lang=en',
+          repositoryUrl: 'https://github.com/danilodg/auralith-ui',
+          projectLabel: 'Open documentation',
           highlights: [
-            'Hero section with direct CTA to WhatsApp and contact form',
-            'Specialties, testimonials, and FAQ sections',
-            'Responsive layout focused on readable mobile content',
+            'Published package as auralith-ui on npm',
+            'Ready-to-use components like Button, Input, Card, Modal, and SideRail',
+            'Token-based style foundation for consistency across products',
           ],
         },
         {
-          title: 'Sales dashboard and KPI tracking',
-          type: 'Dashboard',
-          summary: 'A panel to monitor revenue, goals, and commercial performance in real time.',
-          image: salesDashboardImage,
-          technologies: ['React', 'TypeScript', 'Chart.js', 'Node.js'],
-          details: 'This system was designed to centralize sales metrics, simplify reading for the commercial team, and support faster decisions with visual data.',
+          title: 'Landing Pages Templates',
+          type: 'Web builder',
+          summary: 'A project to build landing pages with a guided wizard, visual styles, and real-time preview.',
+          image: landingTemplatesImage,
+          technologies: ['React', 'TypeScript', 'Vite', 'Material UI'],
+          details: 'I developed a landing page builder with step-by-step configuration, layout variations, and visual customization to speed up deliveries.',
+          repositoryUrl: 'https://github.com/danilodg/landing-pages-templates',
           highlights: [
-            'KPI cards with revenue, average ticket, and conversion',
-            'Comparative charts by period, channel, and salesperson',
-            'Filters for daily, weekly, and monthly tracking',
-          ],
-        },
-        {
-          title: 'Financial management wallet',
-          type: 'Web app',
-          summary: 'A product to organize bills, financial goals, and cash flow tracking.',
-          image: financeAppImage,
-          technologies: ['React', 'TypeScript', 'Firebase', 'Tailwind CSS'],
-          details: 'An application focused on personal finance control with visibility into income and expenses, monthly goals, and transaction categorization.',
-          highlights: [
-            'Balance overview, category spending, and monthly goals',
-            'Income and expense entries with quick filters',
-            'Mobile-first experience for daily monitoring',
+            'Wizard with business type, style, layout, and content steps',
+            'Dynamic landing preview with complete sections',
+            'Architecture ready to evolve with new templates',
           ],
         },
       ],
