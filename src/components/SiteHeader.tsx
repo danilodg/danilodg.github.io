@@ -37,6 +37,20 @@ function ThemeIcon({ effectiveTheme, themeMode }: Pick<SiteHeaderProps, 'effecti
   return <SunMedium className="h-5 w-5" strokeWidth={1.8} />
 }
 
+function BrandMark({ sizeClass }: { sizeClass: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={[
+        'inline-flex items-center justify-center rounded-[14px] border border-white/20 bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] text-white shadow-[0_0_22px_var(--accent-shadow)]',
+        sizeClass,
+      ].join(' ')}
+    >
+      <span className="font-[Space_Grotesk,Trebuchet_MS,sans-serif] text-[0.78rem] font-bold tracking-[0.08em]">DG</span>
+    </span>
+  )
+}
+
 function LanguageSelect({ content, language, onSelectLanguage, compact = false }: Pick<SiteHeaderProps, 'content' | 'language' | 'onSelectLanguage'> & { compact?: boolean }) {
   return (
       <div
@@ -373,7 +387,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
             href="#inicio"
           >
             <span className="flex h-16 w-16 shrink-0 items-center justify-center">
-              <span className="h-11 w-11 rounded-[14px] bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] shadow-[0_0_22px_var(--accent-shadow)]" />
+              <BrandMark sizeClass="h-11 w-11" />
             </span>
             <span className="min-w-max whitespace-nowrap pr-6 opacity-100">
               <strong className="block whitespace-nowrap text-[0.95rem] font-semibold">Danilo Gomes</strong>
@@ -428,7 +442,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       <header className="lg:hidden">
         <div className="mb-8 flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] [view-transition-name:none]">
           <a className="inline-flex min-w-0 flex-1 items-center gap-3 text-[color:var(--text-main)] no-underline" href="#inicio">
-            <span className="h-10 w-10 shrink-0 rounded-[14px] bg-[linear-gradient(145deg,var(--accent-start),color-mix(in_srgb,var(--accent-mid)_55%,transparent))] shadow-[0_0_22px_var(--accent-shadow)]" />
+            <BrandMark sizeClass="h-10 w-10 shrink-0" />
             <span className="min-w-0 pr-1">
               <strong className="block text-sm font-semibold">Danilo Gomes</strong>
               <span className="block truncate text-[0.68rem] uppercase tracking-[0.14em] text-[color:var(--text-muted)]">
