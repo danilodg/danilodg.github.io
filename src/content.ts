@@ -241,7 +241,7 @@ export const siteContent: Record<Language, SiteContent> = {
           image: auralithUiImage,
           technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'npm'],
           details: 'Criei uma biblioteca de UI reutilizavel com foco em consistencia visual, produtividade e composicao de interfaces modernas.',
-          projectUrl: '/auralith-ui/?lang=pt',
+          projectUrl: 'https://danilodg.github.io/auralith-ui/?lang=pt',
           repositoryUrl: 'https://github.com/danilodg/auralith-ui',
           projectLabel: 'Ver documentacao',
           highlights: [
@@ -416,7 +416,7 @@ export const siteContent: Record<Language, SiteContent> = {
           image: auralithUiImage,
           technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'npm'],
           details: 'I built a reusable UI library focused on visual consistency, implementation speed, and modern interface composition.',
-          projectUrl: '/auralith-ui/?lang=en',
+          projectUrl: 'https://danilodg.github.io/auralith-ui/?lang=en',
           repositoryUrl: 'https://github.com/danilodg/auralith-ui',
           projectLabel: 'Open documentation',
           highlights: [

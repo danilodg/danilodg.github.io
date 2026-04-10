@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Button, GlassPanel, SectionLabel } from 'auralith-ui'
-import { useNavigate } from 'react-router-dom'
 
 import type { Language, SiteContent } from '../content'
 import { technologies } from '../content'
@@ -31,7 +30,6 @@ const fallbackMarket: MarketAsset[] = [
 ]
 
 export function HeroSection({ content, language, reducedEffects = false }: HeroSectionProps) {
-  const navigate = useNavigate()
   const [weather, setWeather] = useState<WeatherData>(() => getFallbackWeather(language))
   const [github, setGitHub] = useState<GitHubData>(() => getFallbackGitHub(content.preview))
   const [market, setMarket] = useState<MarketAsset[]>(fallbackMarket)
@@ -153,7 +151,11 @@ export function HeroSection({ content, language, reducedEffects = false }: HeroS
               <Button onClick={() => jumpTo('contato')} type="button" variant="secondary">
                 {content.hero.secondaryCta}
               </Button>
-              <Button onClick={() => navigate(`/auralith-ui/?lang=${language}`)} type="button" variant="secondary">
+              <Button
+                onClick={() => window.open(`https://danilodg.github.io/auralith-ui/?lang=${language}`, '_blank', 'noopener,noreferrer')}
+                type="button"
+                variant="secondary"
+              >
                 Auralith UI Docs
               </Button>
             </div>
