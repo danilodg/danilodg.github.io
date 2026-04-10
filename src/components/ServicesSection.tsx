@@ -46,7 +46,7 @@ export function ServicesSection({ content }: { content: SiteContent['projectsSec
         <h2 className={sectionTitleClass}>{content.title}</h2>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid justify-center gap-4 [grid-template-columns:repeat(auto-fit,minmax(280px,360px))]">
         {content.items.map((project) => (
           <button className="group h-full text-left" key={project.title} onClick={() => setSelectedProject(project)} type="button">
             <GlassPanel className="flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-1">
