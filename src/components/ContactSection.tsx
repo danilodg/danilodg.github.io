@@ -100,11 +100,7 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
 
     try {
       const submittedViaSupabase = await submitViaSupabase(formData)
-      const submittedViaFormSubmit = submittedViaSupabase ? true : await submitViaFormSubmit(formData)
-
-      if (submittedViaSupabase && endpoint) {
-        void submitViaFormSubmit(formData)
-      }
+      const submittedViaFormSubmit = endpoint ? await submitViaFormSubmit(formData) : false
 
       if (!submittedViaSupabase && !submittedViaFormSubmit) {
         throw new Error(content.status.submitError)
