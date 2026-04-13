@@ -90,12 +90,14 @@ export type SiteContent = {
     formLabels: {
       name: string
       email: string
+      phone: string
       subject: string
       message: string
     }
     placeholders: {
       name: string
       email: string
+      phone: string
       subject: string
       message: string
     }
@@ -280,12 +282,14 @@ export const siteContent: Record<Language, SiteContent> = {
       formLabels: {
         name: 'Nome',
         email: 'Email',
+        phone: 'Telefone',
         subject: 'Assunto',
         message: 'Mensagem',
       },
       placeholders: {
         name: 'Seu nome',
         email: 'voce@email.com',
+        phone: '(11) 99999-9999',
         subject: 'Sobre o que voce quer conversar?',
         message: 'Me conte um pouco sobre seu projeto',
       },
@@ -455,12 +459,14 @@ export const siteContent: Record<Language, SiteContent> = {
       formLabels: {
         name: 'Name',
         email: 'Email',
+        phone: 'Phone',
         subject: 'Subject',
         message: 'Message',
       },
       placeholders: {
         name: 'Your name',
         email: 'you@email.com',
+        phone: '+1 (555) 123-4567',
         subject: 'What would you like to talk about?',
         message: 'Tell me a bit about your project',
       },

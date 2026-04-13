@@ -11,6 +11,18 @@ type FormStatus =
   | { type: 'error'; message: string }
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
+const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim() || import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
+const supabaseContactFunction = import.meta.env.VITE_SUPABASE_CONTACT_FUNCTION?.trim() || 'contact-lead'
+
+function formatPhoneMask(value: string) {
+  const digits = value.replace(/\D/g, '').slice(0, 11)
+
+  if (digits.length <= 2) return digits
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
+  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`
+}
 
 export function ContactSection({ content }: { content: SiteContent['contact'] }) {
   const [status, setStatus] = useState<FormStatus>({
@@ -21,6 +33,45 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
 
   const endpoint = contactEmail ? `https://formsubmit.co/ajax/${contactEmail}` : ''
 
+  async function submitViaSupabase(formData: FormData) {
+    if (!supabaseUrl || !supabasePublishableKey) return false
+
+    const payload = {
+      name: String(formData.get('name') || ''),
+      email: String(formData.get('email') || ''),
+      phone: String(formData.get('phone') || ''),
+      subject: String(formData.get('title') || ''),
+      message: String(formData.get('message') || ''),
+      source: 'new_portfolio',
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/${supabaseContactFunction}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${supabasePublishableKey}`,
+        apikey: supabasePublishableKey,
+      },
+      body: JSON.stringify(payload),
+    })
+
+    return response.ok
+  }
+
+  async function submitViaFormSubmit(formData: FormData) {
+    if (!endpoint) return false
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: formData,
+    })
+
+    return response.ok
+  }
+
   useEffect(() => {
     setStatus((currentStatus) => (currentStatus.type === 'idle' ? { type: 'idle', message: content.status.idle } : currentStatus))
   }, [content.status.idle])
@@ -28,7 +79,7 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!endpoint) {
+    if (!endpoint && (!supabaseUrl || !supabasePublishableKey)) {
       setStatus({
         type: 'error',
         message: content.status.missingEmail,
@@ -43,15 +94,10 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
     setStatus({ type: 'idle', message: content.status.sending })
 
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: formData,
-      })
+      const submittedViaSupabase = await submitViaSupabase(formData)
+      const submittedViaFormSubmit = submittedViaSupabase ? false : await submitViaFormSubmit(formData)
 
-      if (!response.ok) {
+      if (!submittedViaSupabase && !submittedViaFormSubmit) {
         throw new Error(content.status.submitError)
       }
 
@@ -114,6 +160,21 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
                 <Input.Field name="email" placeholder={content.placeholders.email} required type="email" />
               </Input.Root>
             </div>
+
+            <Input.Root>
+              <Input.Label>{content.formLabels.phone}</Input.Label>
+              <Input.Field
+                name="phone"
+                onInput={(event) => {
+                  const input = event.currentTarget
+                  input.value = formatPhoneMask(input.value)
+                }}
+                pattern="\(\d{2}\)\s\d{4,5}-\d{4}"
+                placeholder={content.placeholders.phone}
+                required
+                type="tel"
+              />
+            </Input.Root>
 
             <Input.Root>
               <Input.Label>{content.formLabels.subject}</Input.Label>
