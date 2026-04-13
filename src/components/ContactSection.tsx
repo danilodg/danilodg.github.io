@@ -11,6 +11,7 @@ type FormStatus =
   | { type: 'error'; message: string }
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'danilo.gomes.dg91@gmail.com'
+const formSubmitToken = import.meta.env.VITE_FORMSUBMIT_TOKEN?.trim()
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
 const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim() || import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 const supabaseContactFunction = import.meta.env.VITE_SUPABASE_CONTACT_FUNCTION?.trim() || 'contact-lead'
@@ -31,7 +32,11 @@ export function ContactSection({ content }: { content: SiteContent['contact'] })
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const endpoint = contactEmail ? `https://formsubmit.co/ajax/${contactEmail}` : ''
+  const endpoint = formSubmitToken
+    ? `https://formsubmit.co/ajax/${formSubmitToken}`
+    : contactEmail
+      ? `https://formsubmit.co/ajax/${contactEmail}`
+      : ''
 
   async function submitViaSupabase(formData: FormData) {
     if (!supabaseUrl || !supabasePublishableKey) return false
