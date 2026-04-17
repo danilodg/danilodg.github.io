@@ -26,6 +26,19 @@ type NavigatorWithHints = Navigator & {
 }
 
 const themeStorageKey = 'theme-mode'
+const gaMeasurementId = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) || 'G-DQHCX4M98M'
+
+function trackPageView() {
+  if (!gaMeasurementId || typeof window.gtag !== 'function') {
+    return
+  }
+
+  window.gtag('event', 'page_view', {
+    send_to: gaMeasurementId,
+    page_location: window.location.href,
+    page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+  })
+}
 
 function getLanguageFromUrl(url: URL): Language | null {
   const queryLanguage = url.searchParams.get('lang')
@@ -255,11 +268,19 @@ function App() {
       if (nextLanguage) {
         setLanguage(nextLanguage)
       }
+
+      trackPageView()
     }
 
     window.addEventListener('popstate', syncLanguageFromUrl)
+    window.addEventListener('hashchange', syncLanguageFromUrl)
 
-    return () => window.removeEventListener('popstate', syncLanguageFromUrl)
+    trackPageView()
+
+    return () => {
+      window.removeEventListener('popstate', syncLanguageFromUrl)
+      window.removeEventListener('hashchange', syncLanguageFromUrl)
+    }
   }, [])
 
   useEffect(() => {
@@ -272,6 +293,8 @@ function App() {
     if (currentUrl !== nextUrl) {
       window.history.replaceState({}, '', nextUrl)
     }
+
+    trackPageView()
   }, [content.meta.title, language])
 
   const themeStyle = useMemo(() => ({
