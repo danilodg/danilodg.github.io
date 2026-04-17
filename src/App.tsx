@@ -26,7 +26,7 @@ type NavigatorWithHints = Navigator & {
 }
 
 const themeStorageKey = 'theme-mode'
-const gaMeasurementId = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) || 'G-DQHCX4M98M'
+const gaMeasurementId = 'G-DQHCX4M98M'
 
 function trackPageView() {
   if (!gaMeasurementId || typeof window.gtag !== 'function') {
