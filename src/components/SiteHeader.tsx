@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import { FolderKanban, House, Mail, MessageSquareQuote, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
+import { FolderKanban, House, Mail, Monitor, MoonStar, Sparkles, SunMedium } from 'lucide-react'
 import type { Language, SiteContent } from '../content'
 
 type Theme = 'dark' | 'light'
@@ -142,15 +142,13 @@ function DesktopRailButton({ href, icon, label, onClick, isActive = false, expan
 
 function MobileRailButton({ href, icon, label, onClick, isActive = false, buttonRef }: MobileRailButtonProps) {
   const className = [
-    'relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-2 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[flex-grow,color,transform] duration-300 ease-out max-[420px]:px-1.5 max-[420px]:py-2 max-[420px]:text-[0.62rem] max-[420px]:tracking-[0.1em] max-[360px]:gap-0.5 max-[360px]:px-1 max-[360px]:text-[0.58rem] max-[360px]:tracking-[0.08em]',
-    isActive ? 'max-[420px]:flex-[1.2] max-[360px]:flex-[1.35] text-white' : 'max-[420px]:flex-[0.9] max-[360px]:flex-[0.8] text-[color:var(--text-soft)]',
+    'relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[18px] px-2 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-[color,transform] duration-300 ease-out max-[420px]:px-1.5 max-[420px]:py-2 max-[420px]:text-[0.62rem] max-[420px]:tracking-[0.1em] max-[360px]:gap-0.5 max-[360px]:px-1 max-[360px]:text-[0.58rem] max-[360px]:tracking-[0.08em]',
+    isActive ? 'text-white' : 'text-[color:var(--text-soft)]',
   ].join(' ')
 
   const labelClassName = [
     'max-w-full truncate transition-all duration-300 ease-out',
-    isActive
-      ? 'max-[420px]:max-w-full max-[420px]:opacity-100'
-      : 'max-[420px]:max-h-0 max-[420px]:max-w-0 max-[420px]:opacity-0',
+    'max-[420px]:max-w-full max-[420px]:opacity-100',
   ].join(' ')
 
   if (href) {
@@ -179,6 +177,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
   const mobileItemRefs = useRef<Record<string, HTMLElement | null>>({})
   const themeLockTimeoutRef = useRef<number | null>(null)
   const pendingSectionTimeoutRef = useRef<number | null>(null)
+  const pendingSectionRef = useRef<string | null>(null)
 
   useEffect(() => {
     return () => {
@@ -195,7 +194,6 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
   const links: NavItem[] = useMemo(() => [
     { id: 'inicio', href: '#inicio', icon: <House className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.about },
     { id: 'projetos', href: '#projetos', icon: <FolderKanban className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.services },
-    { id: 'recomendacoes', href: '#recomendacoes', icon: <MessageSquareQuote className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.recommendations },
     { id: 'servicos', href: '#servicos', icon: <Sparkles className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.projects },
     { id: 'contato', href: '#contato', icon: <Mail className="h-5 w-5" strokeWidth={1.8} />, label: content.nav.contact },
   ], [content.nav])
@@ -205,6 +203,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
 
   function primeSectionNavigation(sectionId: string) {
     setPendingSection(sectionId)
+    pendingSectionRef.current = sectionId
 
     if (pendingSectionTimeoutRef.current !== null) {
       window.clearTimeout(pendingSectionTimeoutRef.current)
@@ -213,6 +212,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
     pendingSectionTimeoutRef.current = window.setTimeout(() => {
       pendingSectionTimeoutRef.current = null
       setPendingSection(null)
+      pendingSectionRef.current = null
     }, 700)
   }
 
@@ -267,13 +267,14 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
         entries.forEach((entry) => {
           visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
 
-          if (pendingSection === entry.target.id && entry.isIntersecting && entry.intersectionRatio > 0.35) {
+          if (pendingSectionRef.current === entry.target.id && entry.isIntersecting && entry.intersectionRatio > 0.35) {
             if (pendingSectionTimeoutRef.current !== null) {
               window.clearTimeout(pendingSectionTimeoutRef.current)
               pendingSectionTimeoutRef.current = null
             }
 
             setPendingSection(null)
+            pendingSectionRef.current = null
           }
         })
 
@@ -295,7 +296,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       window.removeEventListener('resize', syncActiveSection)
       window.removeEventListener('scroll', syncActiveSection)
     }
-  }, [links, pendingSection])
+  }, [links])
 
   useLayoutEffect(() => {
     let frameId: number | null = null
@@ -440,7 +441,8 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
       </header>
 
       <header className="lg:hidden">
-        <div className="mb-8 flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] [view-transition-name:none]">
+        <div className="fixed top-3 z-30 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[calc(1280px-1.5rem)] pointer-events-none">
+          <div className="pointer-events-auto flex items-center justify-between gap-3 rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] px-4 py-3 shadow-[0_18px_46px_rgba(0,0,0,0.16)] [view-transition-name:none]">
           <a className="inline-flex min-w-0 flex-1 items-center gap-3 text-[color:var(--text-main)] no-underline" href="#inicio">
             <BrandMark sizeClass="h-10 w-10 shrink-0" />
             <span className="min-w-0 pr-1">
@@ -464,6 +466,7 @@ export function SiteHeader({ content, effectiveTheme, language, themeMode, onSel
             </button>
           </div>
         </div>
+      </div>
 
         <nav ref={mobileNavRef} className="fixed inset-x-3 bottom-3 z-30 flex gap-2 overflow-hidden rounded-[26px] border border-[color:var(--nav-border)] bg-[var(--nav-bg)] p-2 shadow-[0_18px_46px_rgba(0,0,0,0.18)] max-[420px]:gap-1.5 max-[420px]:p-1.5 max-[360px]:gap-1 [view-transition-name:none]" aria-label="Navegacao principal mobile">
           <span

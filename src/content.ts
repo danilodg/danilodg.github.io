@@ -13,7 +13,6 @@ export type SiteContent = {
   nav: {
     about: string
     services: string
-    recommendations: string
     projects: string
     contact: string
   }
@@ -42,16 +41,6 @@ export type SiteContent = {
       category: string
       description: string
       highlights: string[]
-    }>
-  }
-  recommendationsSection: {
-    label: string
-    title: string
-    items: Array<{
-      name: string
-      role: string
-      company: string
-      quote: string
     }>
   }
   projectsSection: {
@@ -172,7 +161,6 @@ export const siteContent: Record<Language, SiteContent> = {
     nav: {
       about: 'Home',
       services: 'Servicos',
-      recommendations: 'Reviews',
       projects: 'Projetos',
       contact: 'Contato',
     },
@@ -220,11 +208,6 @@ export const siteContent: Record<Language, SiteContent> = {
           highlights: ['Performance visual', 'Consistencia mobile', 'Navegacao objetiva'],
         },
       ],
-    },
-    recommendationsSection: {
-      label: 'Recomendacoes',
-      title: 'Percepcao de quem ja construiu projetos e processos comigo',
-      items: [],
     },
     projectsSection: {
       label: 'Projetos',
@@ -349,7 +332,6 @@ export const siteContent: Record<Language, SiteContent> = {
     nav: {
       about: 'Home',
       services: 'Services',
-      recommendations: 'Reviews',
       projects: 'Projects',
       contact: 'Contact',
     },
@@ -397,11 +379,6 @@ export const siteContent: Record<Language, SiteContent> = {
           highlights: ['Visual performance', 'Mobile consistency', 'Clear navigation'],
         },
       ],
-    },
-    recommendationsSection: {
-      label: 'Recommendations',
-      title: 'What people say after building projects and processes with me',
-      items: [],
     },
     projectsSection: {
       label: 'Projects',

@@ -6,7 +6,6 @@ import { AboutSection } from './components/AboutSection'
 import { ContactSection } from './components/ContactSection'
 import { HeroSection } from './components/HeroSection'
 import { ProjectsSection } from './components/ProjectsSection'
-import { RecommendationsSection } from './components/RecommendationsSection'
 import { ServicesSection } from './components/ServicesSection'
 import { SiteFooter } from './components/SiteFooter'
 import { SiteHeader } from './components/SiteHeader'
@@ -343,7 +342,7 @@ function App() {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[color:var(--text-soft)] [font-family:Outfit,Segoe_UI,sans-serif] transition-colors duration-300"
+      className="relative min-h-screen bg-[var(--page-bg)] text-[color:var(--text-soft)] [font-family:Outfit,Segoe_UI,sans-serif] transition-colors duration-300"
       data-theme={theme}
       data-theme-mode={themeMode}
       data-performance={reducedEffects ? 'reduced' : 'default'}
@@ -366,7 +365,7 @@ function App() {
         </>
       )}
 
-      <div className="relative z-10 mx-auto max-w-[1280px] px-3 py-4 pb-24 sm:px-4 lg:px-6 lg:py-5 lg:pl-24 lg:pb-6">
+      <div className="relative z-10 mx-auto max-w-[1280px] px-3 pt-[80px] pb-24 sm:px-4 lg:px-6 lg:pt-5 lg:pb-6 lg:pl-24">
         <SiteHeader
           content={content}
           effectiveTheme={theme}
@@ -380,7 +379,6 @@ function App() {
           <HeroSection content={content} language={language} reducedEffects={reducedEffects} />
           <AboutSection content={content.about} />
           <ProjectsSection content={content.servicesSection} />
-          <RecommendationsSection content={content.recommendationsSection} />
           <ServicesSection content={content.projectsSection} />
           <ContactSection content={content.contact} />
         </main>
